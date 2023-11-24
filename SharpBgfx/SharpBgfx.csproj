@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup Label="Configuration">
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-  </PropertyGroup>
+
   <ItemGroup>
     <None Include="..\external\bgfx\bgfx.dll">
       <Link>bgfx.dll</Link>
