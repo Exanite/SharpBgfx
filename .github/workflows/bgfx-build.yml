@@ -1,0 +1,169 @@
+name: bgfx build
+
+# This is based off of the build process in https://github.com/bkaradzic/bgfx/blob/master/.github/workflows/main.yml
+
+on:
+  workflow_dispatch:
+
+jobs:
+  linux:
+    name: Build for Linux (${{ matrix.name }})
+    runs-on: ubuntu-22.04
+
+    strategy:
+      fail-fast: true
+      matrix:
+        include: [
+          { config: release, name: Release },
+          { config: debug, name: Debug },
+        ]
+
+    steps:
+
+      - name: Install bgfx build dependencies
+        run: sudo apt-get install libgl-dev
+
+      - name: Checkout bgfx
+        uses: actions/checkout@v3
+        with:
+          repository: bkaradzic/bgfx
+          path: bgfx
+
+      - name: Checkout bx
+        uses: actions/checkout@v3
+        with:
+          repository: bkaradzic/bx
+          path: bx
+
+      - name: Checkout bimg
+        uses: actions/checkout@v3
+        with:
+          repository: bkaradzic/bimg
+          path: bimg
+
+      - name: Build bgfx
+        working-directory: bgfx
+        run: make -j$(nproc) linux-${{ matrix.config }}64
+
+      - name: Log output
+        run: ls bgfx/.build
+
+      - name: Log output
+        run: ls bgfx/.build/linux64_gcc
+
+      - name: Log output
+        run: ls bgfx/.build/linux64_gcc/bin
+
+      - name: Upload
+        uses: actions/upload-artifact@v3.1.3
+        with:
+          name: Linux-${{ matrix.name }}
+          path: bgfx/.build/linux64_gcc/bin
+
+  mac:
+    name: Build for Mac (${{ matrix.name }})
+    runs-on: macos-12
+
+    strategy:
+      fail-fast: true
+      matrix:
+        include: [
+          { config: release, name: Release },
+          { config: debug, name: Debug },
+        ]
+
+    steps:
+
+      - name: Checkout bgfx
+        uses: actions/checkout@v3
+        with:
+          repository: bkaradzic/bgfx
+          path: bgfx
+
+      - name: Checkout bx
+        uses: actions/checkout@v3
+        with:
+          repository: bkaradzic/bx
+          path: bx
+
+      - name: Checkout bimg
+        uses: actions/checkout@v3
+        with:
+          repository: bkaradzic/bimg
+          path: bimg
+
+      - name: Build
+        working-directory: bgfx
+        run: make -j$(sysctl -n hw.physicalcpu) osx-x64-${{ matrix.config }}
+
+      - name: Log output
+        run: ls bgfx/.build
+
+      - name: Log output
+        run: ls bgfx/.build/osx-x64
+
+      - name: Log output
+        run: ls bgfx/.build/osx-x64/bin
+
+      - name: Upload
+        uses: actions/upload-artifact@v3.1.3
+        with:
+          name: Mac-${{ matrix.name }}
+          path: bgfx/.build/osx-x64/bin
+
+  windows:
+    name: Build for Windows (${{ matrix.name }})
+    runs-on: windows-2019
+
+    strategy:
+      fail-fast: true
+      matrix:
+        include: [
+          { config: Release, name: Release },
+          { config: Debug, name: Debug },
+        ]
+
+    steps:
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.3
+
+      - name: Checkout bgfx
+        uses: actions/checkout@v3
+        with:
+          repository: bkaradzic/bgfx
+          path: bgfx
+
+      - name: Checkout bx
+        uses: actions/checkout@v3
+        with:
+          repository: bkaradzic/bx
+          path: bx
+
+      - name: Checkout bimg
+        uses: actions/checkout@v3
+        with:
+          repository: bkaradzic/bimg
+          path: bimg
+
+      - name: Build bgfx
+        working-directory: bgfx
+        shell: cmd
+        run: |
+          ..\bx\tools\bin\windows\genie.exe --with-tools --with-combined-examples --with-shared-lib vs2019
+          msbuild ".build/projects/vs2019/bgfx.sln" /m /v:minimal /p:Configuration=${{ matrix.config }} /p:Platform=x64
+
+      - name: Log output
+        run: ls bgfx/.build
+
+      - name: Log output
+        run: ls bgfx/.build/win64_vs2019
+
+      - name: Log output
+        run: ls bgfx/.build/win64_vs2019/bin
+
+      - name: Upload
+        uses: actions/upload-artifact@v3.1.3
+        with:
+          name: Windows-${{ matrix.name }}
+          path: bgfx/.build/win64_vs2019/bin
