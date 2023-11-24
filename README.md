@@ -1,3 +1,9 @@
+# SharpBgfx
+This is a fork of https://github.com/MikePopoloski/SharpBgfx, but using the official bgfx bindings.
+
+Note: Most of the original code has been commented out and I don't plan to reimplement most of it.
+
+# Original README
 ## SharpBgfx
 
 Provides managed (C#,VB,F#,etc) bindings for the bgfx graphics library.
