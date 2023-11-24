@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Security;
+using SharpBgfx.Bindings;
 
 namespace SharpBgfx {
     /// <summary>
@@ -45,7 +46,7 @@ namespace SharpBgfx {
         /// </summary>
         /// <param name="size">The size of the block, in bytes.</param>
         public MemoryBlock (int size) {
-            ptr = NativeMethods.bgfx_alloc(size);
+            ptr = bgfx.alloc(size);
         }
 
         /// <summary>
@@ -54,7 +55,7 @@ namespace SharpBgfx {
         /// <param name="data">A pointer to the initial data to copy into the new block.</param>
         /// <param name="size">The size of the block, in bytes.</param>
         public MemoryBlock (IntPtr data, int size) {
-            ptr = NativeMethods.bgfx_copy(data, size);
+            ptr = bgfx.copy(data, size);
         }
 
         /// <summary>
@@ -104,7 +105,7 @@ namespace SharpBgfx {
         /// or released until the callback fires.
         /// </remarks>
         public static MemoryBlock MakeRef (IntPtr data, int size, IntPtr userData, ReleaseCallback callback) {
-            return new MemoryBlock(NativeMethods.bgfx_make_ref_release(data, size, Marshal.GetFunctionPointerForDelegate(callback), userData));
+            return new MemoryBlock(bgfx.make_ref_release(data, size, Marshal.GetFunctionPointerForDelegate(callback), userData));
         }
 
         /// <summary>

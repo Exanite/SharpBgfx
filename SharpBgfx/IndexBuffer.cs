@@ -1,4 +1,5 @@
 ﻿using System;
+using SharpBgfx.Bindings;
 
 namespace SharpBgfx {
     /// <summary>
@@ -18,7 +19,7 @@ namespace SharpBgfx {
         /// <param name="memory">The 16-bit index data used to populate the buffer.</param>
         /// <param name="flags">Flags used to control buffer behavior.</param>
         public IndexBuffer (MemoryBlock memory, BufferFlags flags = BufferFlags.None) {
-            handle = NativeMethods.bgfx_create_index_buffer(memory.ptr, flags);
+            handle = bgfx.create_index_buffer(memory.ptr, flags);
         }
 
         /// <summary>
@@ -26,14 +27,14 @@ namespace SharpBgfx {
         /// </summary>
         /// <param name="name">The name of the texture.</param>
         public void SetName(string name) {
-            NativeMethods.bgfx_set_index_buffer_name(handle, name, int.MaxValue);
+            bgfx.set_index_buffer_name(handle, name, int.MaxValue);
         }
 
         /// <summary>
         /// Releases the index buffer.
         /// </summary>
         public void Dispose () {
-            NativeMethods.bgfx_destroy_index_buffer(handle);
+            bgfx.destroy_index_buffer(handle);
         }
 
         /// <summary>

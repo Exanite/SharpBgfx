@@ -1,4 +1,5 @@
 ﻿using System;
+using SharpBgfx.Bindings;
 
 namespace SharpBgfx {
     /// <summary>
@@ -28,7 +29,7 @@ namespace SharpBgfx {
         /// <param name="count">The number of elements in the buffer.</param>
         /// <param name="stride">The stride of each element.</param>
         public InstanceDataBuffer (int count, int stride) {
-            NativeMethods.bgfx_alloc_instance_data_buffer(out data, count, (ushort)stride);
+            bgfx.alloc_instance_data_buffer(out data, count, (ushort)stride);
         }
 
         /// <summary>
@@ -38,7 +39,7 @@ namespace SharpBgfx {
         /// <param name="stride">The stride of each element.</param>
         /// <returns>The number of available elements.</returns>
         public static int GetAvailableSpace (int count, int stride) {
-            return NativeMethods.bgfx_get_avail_instance_data_buffer(count, (ushort)stride);
+            return bgfx.get_avail_instance_data_buffer(count, (ushort)stride);
         }
 
         /// <summary>

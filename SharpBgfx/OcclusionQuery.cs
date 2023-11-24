@@ -1,4 +1,5 @@
 ﻿using System;
+using SharpBgfx.Bindings;
 
 namespace SharpBgfx {
     /// <summary>
@@ -16,7 +17,7 @@ namespace SharpBgfx {
         /// Gets the result of the query.
         /// </summary>
         public OcclusionQueryResult Result {
-            get { return NativeMethods.bgfx_get_result(handle, null); }
+            get { return bgfx.get_result(handle, null); }
         }
 
         /// <summary>
@@ -26,7 +27,7 @@ namespace SharpBgfx {
         public int PassingPixels {
             get {
                 int pixels = 0;
-                NativeMethods.bgfx_get_result(handle, &pixels);
+                bgfx.get_result(handle, &pixels);
                 return pixels;
             }
         }
@@ -40,14 +41,14 @@ namespace SharpBgfx {
         /// </summary>
         /// <returns>The new occlusion query.</returns>
         public static OcclusionQuery Create() {
-            return new OcclusionQuery(NativeMethods.bgfx_create_occlusion_query());
+            return new OcclusionQuery(bgfx.create_occlusion_query());
         }
 
         /// <summary>
         /// Releases the query.
         /// </summary>
         public void Dispose () {
-            NativeMethods.bgfx_destroy_occlusion_query(handle);
+            bgfx.destroy_occlusion_query(handle);
         }
 
         /// <summary>
@@ -55,7 +56,7 @@ namespace SharpBgfx {
         /// </summary>
         /// <param name="visible"><c>true</c> for visible; <c>false</c> for invisible.</param>
         public void SetCondition (bool visible) {
-            NativeMethods.bgfx_set_condition(handle, visible);
+            bgfx.set_condition(handle, visible);
         }
 
         /// <summary>

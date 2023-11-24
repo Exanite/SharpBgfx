@@ -1,4 +1,5 @@
 ﻿using System;
+using SharpBgfx.Bindings;
 
 namespace SharpBgfx {
     /// <summary>
@@ -19,7 +20,7 @@ namespace SharpBgfx {
         /// <param name="layout">The layout of the vertex data.</param>
         /// <param name="flags">Flags used to control buffer behavior.</param>
         public DynamicVertexBuffer (int vertexCount, VertexLayout layout, BufferFlags flags = BufferFlags.None) {
-            handle = NativeMethods.bgfx_create_dynamic_vertex_buffer(vertexCount, ref layout.data, flags);
+            handle = bgfx.create_dynamic_vertex_buffer(vertexCount, ref layout.data, flags);
         }
 
         /// <summary>
@@ -29,7 +30,7 @@ namespace SharpBgfx {
         /// <param name="layout">The layout of the vertex data.</param>
         /// <param name="flags">Flags used to control buffer behavior.</param>
         public DynamicVertexBuffer (MemoryBlock memory, VertexLayout layout, BufferFlags flags = BufferFlags.None) {
-            handle = NativeMethods.bgfx_create_dynamic_vertex_buffer_mem(memory.ptr, ref layout.data, flags);
+            handle = bgfx.create_dynamic_vertex_buffer_mem(memory.ptr, ref layout.data, flags);
         }
 
         /// <summary>
@@ -38,14 +39,14 @@ namespace SharpBgfx {
         /// <param name="startVertex">Index of the first vertex to update.</param>
         /// <param name="memory">The new vertex data with which to fill the buffer.</param>
         public void Update (int startVertex, MemoryBlock memory) {
-            NativeMethods.bgfx_update_dynamic_vertex_buffer(handle, startVertex, memory.ptr);
+            bgfx.update_dynamic_vertex_buffer(handle, startVertex, memory.ptr);
         }
 
         /// <summary>
         /// Releases the vertex buffer.
         /// </summary>
         public void Dispose () {
-            NativeMethods.bgfx_destroy_dynamic_vertex_buffer(handle);
+            bgfx.destroy_dynamic_vertex_buffer(handle);
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using SharpBgfx.Bindings;
 
 namespace SharpBgfx {
     /// <summary>
@@ -50,7 +51,7 @@ namespace SharpBgfx {
         /// <param name="format">The format of the new surface.</param>
         /// <param name="flags">Texture sampling flags.</param>
         public FrameBuffer (int width, int height, TextureFormat format, TextureFlags flags = TextureFlags.ClampU | TextureFlags.ClampV) {
-            handle = NativeMethods.bgfx_create_frame_buffer((ushort)width, (ushort)height, format, flags);
+            handle = bgfx.create_frame_buffer((ushort)width, (ushort)height, format, flags);
         }
 
         /// <summary>
@@ -60,7 +61,7 @@ namespace SharpBgfx {
         /// <param name="format">The format of the new surface.</param>
         /// <param name="flags">Texture sampling flags.</param>
         public FrameBuffer (BackbufferRatio ratio, TextureFormat format, TextureFlags flags = TextureFlags.ClampU | TextureFlags.ClampV) {
-            handle = NativeMethods.bgfx_create_frame_buffer_scaled(ratio, format, flags);
+            handle = bgfx.create_frame_buffer_scaled(ratio, format, flags);
         }
 
         /// <summary>
@@ -82,7 +83,7 @@ namespace SharpBgfx {
                 };
             }
 
-            handle = NativeMethods.bgfx_create_frame_buffer_from_attachment(count, native, destroyTextures);
+            handle = bgfx.create_frame_buffer_from_attachment(count, native, destroyTextures);
         }
 
         /// <summary>
@@ -96,7 +97,7 @@ namespace SharpBgfx {
             for (int i = 0; i < count; i++)
                 native[i] = textures[i].handle;
 
-            handle = NativeMethods.bgfx_create_frame_buffer_from_handles(count, native, destroyTextures);
+            handle = bgfx.create_frame_buffer_from_handles(count, native, destroyTextures);
         }
 
         /// <summary>
@@ -108,7 +109,7 @@ namespace SharpBgfx {
         /// <param name="format">Window back buffer color format.</param>
         /// <param name="depthFormat">A desired format for a depth buffer, if applicable.</param>
         public FrameBuffer (IntPtr windowHandle, int width, int height, TextureFormat format = TextureFormat.Count, TextureFormat depthFormat = TextureFormat.Count) {
-            handle = NativeMethods.bgfx_create_frame_buffer_from_nwh(windowHandle, (ushort)width, (ushort)height, format, depthFormat);
+            handle = bgfx.create_frame_buffer_from_nwh(windowHandle, (ushort)width, (ushort)height, format, depthFormat);
         }
 
         /// <summary>
@@ -116,14 +117,14 @@ namespace SharpBgfx {
         /// </summary>
         /// <param name="name">The name of the texture.</param>
         public void SetName(string name) {
-            NativeMethods.bgfx_set_frame_buffer_name(handle, name, int.MaxValue);
+            bgfx.set_frame_buffer_name(handle, name, int.MaxValue);
         }
 
         /// <summary>
         /// Releases the frame buffer.
         /// </summary>
         public void Dispose () {
-            NativeMethods.bgfx_destroy_frame_buffer(handle);
+            bgfx.destroy_frame_buffer(handle);
         }
 
         /// <summary>
@@ -133,7 +134,7 @@ namespace SharpBgfx {
         /// <returns>The texture associated with the attachment.</returns>
         public Texture GetTexture (int attachment = 0) {
             var info = new Texture.TextureInfo();
-            return new Texture(NativeMethods.bgfx_get_texture(handle, (byte)attachment), ref info);
+            return new Texture(bgfx.get_texture(handle, (byte)attachment), ref info);
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using SharpBgfx.Bindings;
 
 namespace SharpBgfx {
     /// <summary>
@@ -34,7 +35,7 @@ namespace SharpBgfx {
         /// </summary>
         /// <param name="indexCount">The number of 16-bit indices that fit in the buffer.</param>
         public TransientIndexBuffer (int indexCount) {
-            NativeMethods.bgfx_alloc_transient_index_buffer(out this, indexCount);
+            bgfx.alloc_transient_index_buffer(out this, indexCount);
         }
 
         /// <summary>
@@ -43,7 +44,7 @@ namespace SharpBgfx {
         /// <param name="count">The number of 16-bit indices required.</param>
         /// <returns>The number of available indices.</returns>
         public static int GetAvailableSpace (int count) {
-            return NativeMethods.bgfx_get_avail_transient_index_buffer(count);
+            return bgfx.get_avail_transient_index_buffer(count);
         }
 
         /// <summary>

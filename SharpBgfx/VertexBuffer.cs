@@ -1,4 +1,5 @@
 ﻿using System;
+using SharpBgfx.Bindings;
 
 namespace SharpBgfx {
     /// <summary>
@@ -19,7 +20,7 @@ namespace SharpBgfx {
         /// <param name="layout">The layout of the vertex data.</param>
         /// <param name="flags">Flags used to control buffer behavior.</param>
         public VertexBuffer (MemoryBlock memory, VertexLayout layout, BufferFlags flags = BufferFlags.None) {
-            handle = NativeMethods.bgfx_create_vertex_buffer(memory.ptr, ref layout.data, flags);
+            handle = bgfx.create_vertex_buffer(memory.ptr, ref layout.data, flags);
         }
 
         /// <summary>
@@ -27,14 +28,14 @@ namespace SharpBgfx {
         /// </summary>
         /// <param name="name">The name of the texture.</param>
         public void SetName(string name) {
-            NativeMethods.bgfx_set_vertex_buffer_name(handle, name, int.MaxValue);
+            bgfx.set_vertex_buffer_name(handle, name, int.MaxValue);
         }
 
         /// <summary>
         /// Releases the vertex buffer.
         /// </summary>
         public void Dispose () {
-            NativeMethods.bgfx_destroy_vertex_buffer(handle);
+            bgfx.destroy_vertex_buffer(handle);
         }
 
         /// <summary>

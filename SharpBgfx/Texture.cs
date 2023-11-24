@@ -1,4 +1,5 @@
 ﻿using System;
+using SharpBgfx.Bindings;
 
 namespace SharpBgfx {
     /// <summary>
@@ -81,7 +82,7 @@ namespace SharpBgfx {
         /// </remarks>
         public static Texture FromFile (MemoryBlock memory, TextureFlags flags = TextureFlags.None, int skipMips = 0) {
             TextureInfo info;
-            var handle = NativeMethods.bgfx_create_texture(memory.ptr, flags, (byte)skipMips, out info);
+            var handle = bgfx.create_texture(memory.ptr, flags, (byte)skipMips, out info);
 
             return new Texture(handle, ref info);
         }
@@ -101,9 +102,9 @@ namespace SharpBgfx {
         /// </returns>
         public static Texture Create2D (int width, int height, bool hasMips, int arrayLayers, TextureFormat format, TextureFlags flags = TextureFlags.None, MemoryBlock? memory = null) {
             var info = new TextureInfo();
-            NativeMethods.bgfx_calc_texture_size(ref info, (ushort)width, (ushort)height, 1, false, hasMips, (ushort)arrayLayers, format);
+            bgfx.calc_texture_size(ref info, (ushort)width, (ushort)height, 1, false, hasMips, (ushort)arrayLayers, format);
 
-            var handle = NativeMethods.bgfx_create_texture_2d(info.Width, info.Height, hasMips, (ushort)arrayLayers, format, flags, memory == null ? null : memory.Value.ptr);
+            var handle = bgfx.create_texture_2d(info.Width, info.Height, hasMips, (ushort)arrayLayers, format, flags, memory == null ? null : memory.Value.ptr);
             return new Texture(handle, ref info);
         }
 
@@ -124,7 +125,7 @@ namespace SharpBgfx {
                 Layers = (ushort)arrayLayers
             };
 
-            var handle = NativeMethods.bgfx_create_texture_2d_scaled(ratio, hasMips, (ushort)arrayLayers, format, flags);
+            var handle = bgfx.create_texture_2d_scaled(ratio, hasMips, (ushort)arrayLayers, format, flags);
             return new Texture(handle, ref info);
         }
 
@@ -141,9 +142,9 @@ namespace SharpBgfx {
         /// <returns>The newly created texture handle.</returns>
         public static Texture Create3D (int width, int height, int depth, bool hasMips, TextureFormat format, TextureFlags flags = TextureFlags.None, MemoryBlock? memory = null) {
             var info = new TextureInfo();
-            NativeMethods.bgfx_calc_texture_size(ref info, (ushort)width, (ushort)height, (ushort)depth, false, hasMips, 1, format);
+            bgfx.calc_texture_size(ref info, (ushort)width, (ushort)height, (ushort)depth, false, hasMips, 1, format);
 
-            var handle = NativeMethods.bgfx_create_texture_3d(info.Width, info.Height, info.Depth, hasMips, format, flags, memory == null ? null : memory.Value.ptr);
+            var handle = bgfx.create_texture_3d(info.Width, info.Height, info.Depth, hasMips, format, flags, memory == null ? null : memory.Value.ptr);
             return new Texture(handle, ref info);
         }
 
@@ -161,9 +162,9 @@ namespace SharpBgfx {
         /// </returns>
         public static Texture CreateCube (int size, bool hasMips, int arrayLayers, TextureFormat format, TextureFlags flags = TextureFlags.None, MemoryBlock? memory = null) {
             var info = new TextureInfo();
-            NativeMethods.bgfx_calc_texture_size(ref info, (ushort)size, (ushort)size, 1, true, hasMips, (ushort)arrayLayers, format);
+            bgfx.calc_texture_size(ref info, (ushort)size, (ushort)size, 1, true, hasMips, (ushort)arrayLayers, format);
 
-            var handle = NativeMethods.bgfx_create_texture_cube(info.Width, hasMips, (ushort)arrayLayers, format, flags, memory == null ? null : memory.Value.ptr);
+            var handle = bgfx.create_texture_cube(info.Width, hasMips, (ushort)arrayLayers, format, flags, memory == null ? null : memory.Value.ptr);
             return new Texture(handle, ref info);
         }
 
@@ -177,14 +178,14 @@ namespace SharpBgfx {
         /// <param name="flags">Flags that control texture behavior.</param>
         /// <returns></returns>
         public static bool IsValid (int depth, bool isCube, int arrayLayers, TextureFormat format, TextureFlags flags = TextureFlags.None) {
-            return NativeMethods.bgfx_is_texture_valid((ushort)depth, isCube, (ushort)arrayLayers, format, flags);
+            return bgfx.is_texture_valid((ushort)depth, isCube, (ushort)arrayLayers, format, flags);
         }
 
         /// <summary>
         /// Releases the texture.
         /// </summary>
         public void Dispose () {
-            NativeMethods.bgfx_destroy_texture(handle);
+            bgfx.destroy_texture(handle);
         }
 
         /// <summary>
@@ -192,7 +193,7 @@ namespace SharpBgfx {
         /// </summary>
         /// <param name="name">The name of the texture.</param>
         public void SetName(string name) {
-            NativeMethods.bgfx_set_texture_name(handle, name, int.MaxValue);
+            bgfx.set_texture_name(handle, name, int.MaxValue);
         }
 
         /// <summary>
@@ -207,7 +208,7 @@ namespace SharpBgfx {
         /// <param name="memory">The new image data.</param>
         /// <param name="pitch">The pitch of the image data.</param>
         public void Update2D (int arrayLayer, int mipLevel, int x, int y, int width, int height, MemoryBlock memory, int pitch) {
-            NativeMethods.bgfx_update_texture_2d(handle, (ushort)arrayLayer, (byte)mipLevel, (ushort)x, (ushort)y, (ushort)width, (ushort)height, memory.ptr, (ushort)pitch);
+            bgfx.update_texture_2d(handle, (ushort)arrayLayer, (byte)mipLevel, (ushort)x, (ushort)y, (ushort)width, (ushort)height, memory.ptr, (ushort)pitch);
         }
 
         /// <summary>
@@ -222,7 +223,7 @@ namespace SharpBgfx {
         /// <param name="depth">The depth of the volume to update.</param>
         /// <param name="memory">The new image data.</param>
         public void Update3D (int mipLevel, int x, int y, int z, int width, int height, int depth, MemoryBlock memory) {
-            NativeMethods.bgfx_update_texture_3d(handle, (byte)mipLevel, (ushort)x, (ushort)y, (ushort)z, (ushort)width, (ushort)height, (ushort)depth, memory.ptr);
+            bgfx.update_texture_3d(handle, (byte)mipLevel, (ushort)x, (ushort)y, (ushort)z, (ushort)width, (ushort)height, (ushort)depth, memory.ptr);
         }
 
         /// <summary>
@@ -238,7 +239,7 @@ namespace SharpBgfx {
         /// <param name="memory">The new image data.</param>
         /// <param name="pitch">The pitch of the image data.</param>
         public void UpdateCube (CubeMapFace face, int arrayLayer, int mipLevel, int x, int y, int width, int height, MemoryBlock memory, int pitch) {
-            NativeMethods.bgfx_update_texture_cube(handle, (ushort)arrayLayer, face, (byte)mipLevel, (ushort)x, (ushort)y, (ushort)width, (ushort)height, memory.ptr, (ushort)pitch);
+            bgfx.update_texture_cube(handle, (ushort)arrayLayer, face, (byte)mipLevel, (ushort)x, (ushort)y, (ushort)width, (ushort)height, memory.ptr, (ushort)pitch);
         }
 
         /// <summary>
@@ -278,7 +279,7 @@ namespace SharpBgfx {
         public void BlitTo (ushort viewId, Texture dest, int destMip, int destX, int destY, int destZ,
                             int sourceMip = 0, int sourceX = 0, int sourceY = 0, int sourceZ = 0,
                             int width = ushort.MaxValue, int height = ushort.MaxValue, int depth = ushort.MaxValue) {
-            NativeMethods.bgfx_blit(viewId, dest.handle, (byte)destMip, (ushort)destX, (ushort)destY, (ushort)destZ,
+            bgfx.blit(viewId, dest.handle, (byte)destMip, (ushort)destX, (ushort)destY, (ushort)destZ,
                 handle, (byte)sourceMip, (ushort)sourceX, (ushort)sourceY, (ushort)sourceZ, (ushort)width, (ushort)height, (ushort)depth);
         }
 
@@ -321,7 +322,7 @@ namespace SharpBgfx {
         public void BlitTo (Encoder encoder, ushort viewId, Texture dest, int destMip, int destX, int destY, int destZ,
                             int sourceMip = 0, int sourceX = 0, int sourceY = 0, int sourceZ = 0,
                             int width = ushort.MaxValue, int height = ushort.MaxValue, int depth = ushort.MaxValue) {
-            NativeMethods.bgfx_encoder_blit(encoder.ptr, viewId, dest.handle, (byte)destMip, (ushort)destX, (ushort)destY, (ushort)destZ,
+            bgfx.encoder_blit(encoder.ptr, viewId, dest.handle, (byte)destMip, (ushort)destX, (ushort)destY, (ushort)destZ,
                 handle, (byte)sourceMip, (ushort)sourceX, (ushort)sourceY, (ushort)sourceZ, (ushort)width, (ushort)height, (ushort)depth);
         }
 
@@ -333,7 +334,7 @@ namespace SharpBgfx {
         /// <returns>The frame number on which the result will be available.</returns>
         /// <remarks>The texture must have been created with the <see cref="TextureFlags.ReadBack"/> flag.</remarks>
         public int Read (IntPtr data, int mip) {
-            return (int)NativeMethods.bgfx_read_texture(handle, data, (byte)mip);
+            return (int)bgfx.read_texture(handle, data, (byte)mip);
         }
 
         /// <summary>
@@ -345,7 +346,7 @@ namespace SharpBgfx {
         /// created from the main thread.
         /// </returns>
         public IntPtr OverrideInternal (IntPtr ptr) {
-            return NativeMethods.bgfx_override_internal_texture_ptr(handle, ptr);
+            return bgfx.override_internal_texture_ptr(handle, ptr);
         }
 
         /// <summary>
@@ -365,7 +366,7 @@ namespace SharpBgfx {
             Height = height;
             MipLevels = mipCount;
             Format = format;
-            return NativeMethods.bgfx_override_internal_texture(handle, (ushort)width, (ushort)height, (byte)mipCount, format, flags);
+            return bgfx.override_internal_texture(handle, (ushort)width, (ushort)height, (byte)mipCount, format, flags);
         }
 
         /// <summary>
@@ -376,7 +377,7 @@ namespace SharpBgfx {
         /// not supported. If the result is -1, the texture is pending creation.
         /// </returns>
         public IntPtr GetDirectAccess () {
-            return NativeMethods.bgfx_get_direct_access_ptr(handle);
+            return bgfx.get_direct_access_ptr(handle);
         }
 
         /// <summary>

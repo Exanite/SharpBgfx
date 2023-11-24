@@ -1,4 +1,5 @@
 ﻿using System;
+using SharpBgfx.Bindings;
 
 namespace SharpBgfx {
     /// <summary>
@@ -19,7 +20,7 @@ namespace SharpBgfx {
         /// <param name="fragmentShader">The fragment shader.</param>
         /// <param name="destroyShaders">if set to <c>true</c>, the shaders will be released after creating the program.</param>
         public Program (Shader vertexShader, Shader fragmentShader, bool destroyShaders = false) {
-            handle = NativeMethods.bgfx_create_program(vertexShader.handle, fragmentShader.handle, destroyShaders);
+            handle = bgfx.create_program(vertexShader.handle, fragmentShader.handle, destroyShaders);
         }
 
         /// <summary>
@@ -28,14 +29,14 @@ namespace SharpBgfx {
         /// <param name="computeShader">The compute shader.</param>
         /// <param name="destroyShaders">if set to <c>true</c>, the compute shader will be released after creating the program.</param>
         public Program (Shader computeShader, bool destroyShaders = false) {
-            handle = NativeMethods.bgfx_create_compute_program(computeShader.handle, destroyShaders);
+            handle = bgfx.create_compute_program(computeShader.handle, destroyShaders);
         }
 
         /// <summary>
         /// Releases the program.
         /// </summary>
         public void Dispose () {
-            NativeMethods.bgfx_destroy_program(handle);
+            bgfx.destroy_program(handle);
         }
 
         /// <summary>

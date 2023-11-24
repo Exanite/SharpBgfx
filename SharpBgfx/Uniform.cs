@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using SharpBgfx.Bindings;
 
 namespace SharpBgfx {
     /// <summary>
@@ -19,7 +20,7 @@ namespace SharpBgfx {
         public string Name {
             get {
                 Info info;
-                NativeMethods.bgfx_get_uniform_info(handle, out info);
+                bgfx.get_uniform_info(handle, out info);
                 return Marshal.PtrToStringAnsi(new IntPtr(info.name));
             }
         }
@@ -30,7 +31,7 @@ namespace SharpBgfx {
         public UniformType Type {
             get {
                 Info info;
-                NativeMethods.bgfx_get_uniform_info(handle, out info);
+                bgfx.get_uniform_info(handle, out info);
                 return info.type;
             }
         }
@@ -41,7 +42,7 @@ namespace SharpBgfx {
         public int ArraySize {
             get {
                 Info info;
-                NativeMethods.bgfx_get_uniform_info(handle, out info);
+                bgfx.get_uniform_info(handle, out info);
                 return info.arraySize;
             }
         }
@@ -68,14 +69,14 @@ namespace SharpBgfx {
         /// u_alphaRef float - alpha reference value for alpha test.
         /// </remarks>
         public Uniform (string name, UniformType type, int arraySize = 1) {
-            handle = NativeMethods.bgfx_create_uniform(name, type, (ushort)arraySize);
+            handle = bgfx.create_uniform(name, type, (ushort)arraySize);
         }
 
         /// <summary>
         /// Releases the uniform.
         /// </summary>
         public void Dispose () {
-            NativeMethods.bgfx_destroy_uniform(handle);
+            bgfx.destroy_uniform(handle);
         }
 
         /// <summary>

@@ -1,4 +1,6 @@
-﻿namespace SharpBgfx {
+﻿using SharpBgfx.Bindings;
+
+namespace SharpBgfx {
     /// <summary>
     /// Describes the layout of data in a vertex stream.
     /// </summary>
@@ -18,7 +20,7 @@
         /// <param name="backend">The rendering backend with which to associate the attributes.</param>
         /// <returns>This instance, for use in a fluent API.</returns>
         public VertexLayout Begin (RendererBackend backend = RendererBackend.Noop) {
-            NativeMethods.bgfx_vertex_decl_begin(ref data, backend);
+            bgfx.vertex_decl_begin(ref data, backend);
             return this;
         }
 
@@ -34,7 +36,7 @@
         /// This instance, for use in a fluent API.
         /// </returns>
         public VertexLayout Add (VertexAttributeUsage attribute, int count, VertexAttributeType type, bool normalized = false, bool asInt = false) {
-            NativeMethods.bgfx_vertex_decl_add(ref data, attribute, (byte)count, type, normalized, asInt);
+            bgfx.vertex_decl_add(ref data, attribute, (byte)count, type, normalized, asInt);
             return this;
         }
 
@@ -44,7 +46,7 @@
         /// <param name="count">The number of bytes to skip.</param>
         /// <returns>This instance, for use in a fluent API.</returns>
         public VertexLayout Skip (int count) {
-            NativeMethods.bgfx_vertex_decl_skip(ref data, (byte)count);
+            bgfx.vertex_decl_skip(ref data, (byte)count);
             return this;
         }
 
@@ -53,7 +55,7 @@
         /// </summary>
         /// <returns>This instance, for use in a fluent API.</returns>
         public VertexLayout End () {
-            NativeMethods.bgfx_vertex_decl_end(ref data);
+            bgfx.vertex_decl_end(ref data);
             return this;
         }
 

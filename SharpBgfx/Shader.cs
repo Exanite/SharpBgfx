@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SharpBgfx.Bindings;
 
 namespace SharpBgfx {
     /// <summary>
@@ -20,9 +21,9 @@ namespace SharpBgfx {
         public IReadOnlyList<Uniform> Uniforms {
             get {
                 if (uniforms == null) {
-                    var count = NativeMethods.bgfx_get_shader_uniforms(handle, null, 0);
+                    var count = bgfx.get_shader_uniforms(handle, null, 0);
                     uniforms = new Uniform[count];
-                    NativeMethods.bgfx_get_shader_uniforms(handle, uniforms, count);
+                    bgfx.get_shader_uniforms(handle, uniforms, count);
                 }
 
                 return uniforms;
@@ -34,7 +35,7 @@ namespace SharpBgfx {
         /// </summary>
         /// <param name="memory">The compiled shader memory.</param>
         public Shader (MemoryBlock memory) {
-            handle = NativeMethods.bgfx_create_shader(memory.ptr);
+            handle = bgfx.create_shader(memory.ptr);
             uniforms = null;
         }
 
@@ -42,7 +43,7 @@ namespace SharpBgfx {
         /// Releases the shader.
         /// </summary>
         public void Dispose () {
-            NativeMethods.bgfx_destroy_shader(handle);
+            bgfx.destroy_shader(handle);
         }
 
         /// <summary>
@@ -50,7 +51,7 @@ namespace SharpBgfx {
         /// </summary>
         /// <param name="name">The name of the shader.</param>
         public void SetName(string name) {
-            NativeMethods.bgfx_set_shader_name(handle, name, int.MaxValue);
+            bgfx.set_shader_name(handle, name, int.MaxValue);
         }
 
         /// <summary>

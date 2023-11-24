@@ -1,4 +1,5 @@
 ﻿using System;
+using SharpBgfx.Bindings;
 
 namespace SharpBgfx {
     /// <summary>
@@ -17,14 +18,14 @@ namespace SharpBgfx {
         /// </summary>
         /// <param name="size">The number of commands that can fit in the buffer.</param>
         public IndirectBuffer (int size) {
-            handle = NativeMethods.bgfx_create_indirect_buffer(size);
+            handle = bgfx.create_indirect_buffer(size);
         }
 
         /// <summary>
         /// Releases the index buffer.
         /// </summary>
         public void Dispose () {
-            NativeMethods.bgfx_destroy_indirect_buffer(handle);
+            bgfx.destroy_indirect_buffer(handle);
         }
 
         /// <summary>
