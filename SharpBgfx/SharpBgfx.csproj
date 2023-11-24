@@ -6,11 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\external\bgfx\bgfx.dll">
+    <None Include="..\libs\Windows\bgfx.dll">
       <Link>bgfx.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\external\bgfx\bgfx_debug.dll">
+    <None Include="..\libs\Windows\bgfx_debug.dll">
       <Link>bgfx_debug.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
