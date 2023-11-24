@@ -36,5 +36,6 @@ _ReSharper*/
 *.opendb
 packages/*
 .vs/*
+.idea/
 
 !/examples/Assets/Shaders/bin
