@@ -1,7 +1,7 @@
 # SharpBgfx
 This is a fork of https://github.com/MikePopoloski/SharpBgfx, but using the official bgfx bindings.
 
-Note: Most of the original code has been commented out and I don't plan to reimplement most of it.
+Note: Most of the original code has been commented out. I will use it as a reference, but will likely not reimplement all of it.
 
 ## Changes of note
 
