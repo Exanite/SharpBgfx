@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using SharpBgfx.Bindings;
 
@@ -9,23 +8,16 @@ public unsafe class SimpleCallbackHandler : ICallbackHandler
 {
     public void ReportError(string fileName, int line, ErrorType errorType, string message)
     {
-        if (errorType == ErrorType.DebugCheck)
-        {
-            Debug.Write(message);
-        }
-        else
-        {
-            Debug.Write(string.Format("{0} ({1})  {2}: {3}", fileName, line, errorType, message));
-            Debugger.Break();
-            Environment.Exit(1);
-        }
+        Console.WriteLine($"BGFX {errorType} {fileName}:{line}: {message}");
     }
 
     public void ReportDebug(string fileName, int line, string format, IntPtr args)
     {
-        var buffer = stackalloc sbyte[1024];
+        var buffer = stackalloc sbyte[2048];
         bgfx.bgfx_vsnprintf(buffer, new IntPtr(1024), format, args);
-        Debug.Write(Marshal.PtrToStringAnsi(new IntPtr(buffer)));
+
+        var message = Marshal.PtrToStringAnsi(new IntPtr(buffer));
+        Console.Write(message + "\r");
     }
 
     public void ProfilerBegin(string name, int color, string filePath, int line) {}
