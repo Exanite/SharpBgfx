@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using SharpBgfx.Bindings;
 
 namespace SharpBgfx;
 
-internal unsafe partial struct CallbackShim
+public unsafe partial struct CallbackShim
 {
-    private static IntPtr ShimMemory;
-    private static DelegateSaver SavedDelegates;
+    private static Dictionary<IntPtr, DelegateSaver> Shims = new Dictionary<IntPtr, DelegateSaver>();
 
     private IntPtr vtbl;
     private IntPtr reportError;
@@ -22,6 +23,11 @@ internal unsafe partial struct CallbackShim
     private IntPtr captureFinished;
     private IntPtr captureFrame;
 
+    /// <summary>
+    /// Creates a shim that can be passed into <see cref="bgfx.Init.callback"/>.
+    /// <para/>
+    /// Pointer must be freed using <see cref="FreeShim"/>.
+    /// </summary>
     public static IntPtr CreateShim(ICallbackHandler handler)
     {
         if (handler == null)
@@ -29,34 +35,29 @@ internal unsafe partial struct CallbackShim
             return IntPtr.Zero;
         }
 
-        if (SavedDelegates != null)
-        {
-            throw new InvalidOperationException("Callbacks should only be initialized once; bgfx can only deal with one set at a time.");
-        }
+        var shimMemory = Marshal.AllocHGlobal(Marshal.SizeOf<CallbackShim>());
+        var shim = (CallbackShim*)shimMemory;
+        var savedDelegates = new DelegateSaver(handler, shim);
 
-        var memory = Marshal.AllocHGlobal(Marshal.SizeOf<CallbackShim>());
-        var shim = (CallbackShim*)memory;
-        var saver = new DelegateSaver(handler, shim);
-
-        // the shim uses the unnecessary ctor slot to act as a vtbl pointer to itself,
+        // The shim uses the unnecessary ctor slot to act as a vtbl pointer to itself,
         // so that the same block of memory can act as both bgfx_callback_interface_t and bgfx_callback_vtbl_t
-        shim->vtbl = memory + IntPtr.Size;
+        shim->vtbl = shimMemory + IntPtr.Size;
 
-        // cache the data so we can free it later
-        ShimMemory = memory;
-        SavedDelegates = saver;
 
-        return memory;
+        // Cache the data so we can free it later
+        Shims.Add(shimMemory, savedDelegates);
+
+        return shimMemory;
     }
 
-    public static void FreeShim()
+    /// <summary>
+    /// Free the memory allocated by the shim.
+    /// </summary>
+    public static void FreeShim(IntPtr shim)
     {
-        if (SavedDelegates == null)
+        if (Shims.Remove(shim, out var savedDelegates))
         {
-            return;
+            Marshal.FreeHGlobal(shim);
         }
-
-        SavedDelegates = null;
-        Marshal.FreeHGlobal(ShimMemory);
     }
 }

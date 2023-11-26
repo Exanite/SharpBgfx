@@ -5,7 +5,7 @@ using SharpBgfx.Bindings;
 
 namespace SharpBgfx;
 
-internal unsafe partial struct CallbackShim
+public unsafe partial struct CallbackShim
 {
     [SuppressUnmanagedCodeSecurity]
     [UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Ansi)]

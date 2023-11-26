@@ -4,7 +4,7 @@ using SharpBgfx.Bindings;
 
 namespace SharpBgfx;
 
-internal unsafe partial struct CallbackShim
+public unsafe partial struct CallbackShim
 {
     // We're creating delegates to a user's interface methods; we're then converting those delegates
     // to native pointers and passing them into native code. If we don't save the references to the
