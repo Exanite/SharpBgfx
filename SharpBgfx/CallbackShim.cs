@@ -26,9 +26,9 @@ public unsafe partial struct CallbackShim
     /// <summary>
     /// Creates a shim that can be passed into <see cref="bgfx.Init.callback"/>.
     /// <para/>
-    /// Pointer must be freed using <see cref="FreeShim"/>.
+    /// Pointer must be freed using <see cref="Free"/>.
     /// </summary>
-    public static IntPtr CreateShim(ICallbackHandler handler)
+    public static IntPtr Create(ICallbackHandler handler)
     {
         if (handler == null)
         {
@@ -51,9 +51,9 @@ public unsafe partial struct CallbackShim
     }
 
     /// <summary>
-    /// Free the memory allocated by the shim.
+    /// Frees a shim created by <see cref="Create"/>.
     /// </summary>
-    public static void FreeShim(IntPtr shim)
+    public static void Free(IntPtr shim)
     {
         if (Shims.Remove(shim, out var savedDelegates))
         {
