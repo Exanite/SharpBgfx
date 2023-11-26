@@ -3,6 +3,12 @@ This is a fork of https://github.com/MikePopoloski/SharpBgfx, but using the offi
 
 Note: Most of the original code has been commented out and I don't plan to reimplement most of it.
 
+## Changes of note
+
+In order to allow bgfx log messages to be properly formatted, I have forked bgfx ([Exanite/bgfx](https://github.com/Exanite/bgfx)) and added `bgfx_vsnprintf` to the list of exported functions.
+
+The original SharpBgfx repo also did something similar. See: https://github.com/MikePopoloski/SharpBgfx/issues/11
+
 # Original README
 ## SharpBgfx
 
