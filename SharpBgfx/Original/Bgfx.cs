@@ -962,32 +962,5 @@
 //             return new Encoder(bgfx.begin());
 //         }
 //
-//         class DefaultCallbackHandler : ICallbackHandler {
-//             public void ProfilerBegin (string name, int color, string filePath, int line) {}
-//             public void ProfilerEnd () {}
-//             public void CaptureStarted(int width, int height, int pitch, TextureFormat format, bool flipVertical) {}
-//             public void CaptureFrame(IntPtr data, int size) {}
-//             public void CaptureFinished() {}
-//             public int GetCachedSize(long id) { return 0; }
-//             public bool GetCacheEntry(long id, IntPtr data, int size) { return false; }
-//             public void SetCacheEntry(long id, IntPtr data, int size) {}
-//             public void SaveScreenShot(string path, int width, int height, int pitch, IntPtr data, int size, bool flipVertical) {}
-//
-//             public void ReportDebug(string fileName, int line, string format, IntPtr args) {
-//                 sbyte* buffer = stackalloc sbyte[1024];
-//                 bgfx.vsnprintf(buffer, new IntPtr(1024), format, args);
-//                 Debug.Write(Marshal.PtrToStringAnsi(new IntPtr(buffer)));
-//             }
-//
-//             public void ReportError(string fileName, int line, ErrorType errorType, string message) {
-//                 if (errorType == ErrorType.DebugCheck)
-//                     Debug.Write(message);
-//                 else {
-//                     Debug.Write(string.Format("{0} ({1})  {2}: {3}", fileName, line, errorType, message));
-//                     Debugger.Break();
-//                     Environment.Exit(1);
-//                 }
-//             }
-//         }
 //     }
 // }
