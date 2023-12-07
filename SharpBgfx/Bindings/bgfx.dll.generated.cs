@@ -18,9 +18,9 @@ namespace SharpBgfx.Bindings
 public static partial class bgfx
 {
 #if DEBUG
-       const string DllName = "bgfx_debug.dll";
+       const string DllName = "bgfx_debug";
 #else
-       const string DllName = "bgfx.dll";
+       const string DllName = "bgfx";
 #endif
 }
 }
