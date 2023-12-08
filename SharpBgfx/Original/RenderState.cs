@@ -5,7 +5,7 @@ namespace SharpBgfx.Original;
 /// <summary>
 /// Specifies state information used to configure rendering operations.
 /// </summary>
-public struct RenderState : IEquatable<RenderState>
+public struct RenderState
 {
     private const int AlphaRefShift = 40;
     private const int PointSizeShift = 52;
@@ -373,71 +373,6 @@ public struct RenderState : IEquatable<RenderState>
     public static RenderState BlendEquation(RenderState sourceEquation, RenderState alphaEquation)
     {
         return sourceEquation | (alphaEquation << 3);
-    }
-
-    /// <summary>
-    /// Returns a hash code for this instance.
-    /// </summary>
-    /// <returns>
-    /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
-    /// </returns>
-    public override int GetHashCode()
-    {
-        return value.GetHashCode();
-    }
-
-    /// <summary>
-    /// Determines whether the specific value is equal to this instance.
-    /// </summary>
-    /// <param name="other">The value to compare with this instance.</param>
-    /// <returns><c>true</c> if the value is equal to this instance; otherwise, <c>false</c>.</returns>
-    public bool Equals(RenderState other)
-    {
-        return value == other.value;
-    }
-
-    /// <summary>
-    /// Determines whether the specified <see cref="System.Object"/> is equal to this instance.
-    /// </summary>
-    /// <param name="obj">The <see cref="System.Object"/> to compare with this instance.</param>
-    /// <returns>
-    ///   <c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
-    /// </returns>
-    public override bool Equals(object obj)
-    {
-        var state = obj as RenderState?;
-        if (state == null)
-        {
-            return false;
-        }
-
-        return Equals(state);
-    }
-
-    /// <summary>
-    /// Implements the equality operator.
-    /// </summary>
-    /// <param name="left">The left side of the operator.</param>
-    /// <param name="right">The right side of the operator.</param>
-    /// <returns>
-    /// <c>true</c> if the two objects are equal; otherwise, <c>false</c>.
-    /// </returns>
-    public static bool operator ==(RenderState left, RenderState right)
-    {
-        return left.Equals(right);
-    }
-
-    /// <summary>
-    /// Implements the inequality operator.
-    /// </summary>
-    /// <param name="left">The left side of the operator.</param>
-    /// <param name="right">The right side of the operator.</param>
-    /// <returns>
-    /// <c>true</c> if the two objects are not equal; otherwise, <c>false</c>.
-    /// </returns>
-    public static bool operator !=(RenderState left, RenderState right)
-    {
-        return !left.Equals(right);
     }
 
     /// <summary>
