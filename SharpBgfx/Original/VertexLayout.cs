@@ -1,4 +1,4 @@
-﻿namespace SharpBgfx;
+﻿namespace SharpBgfx.Original;
 
 /// <summary>
 /// Describes the layout of data in a vertex stream.

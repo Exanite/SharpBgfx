@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SharpBgfx;
+namespace SharpBgfx.Original;
 
 /// <summary>
 /// Represents a single compiled shader component.

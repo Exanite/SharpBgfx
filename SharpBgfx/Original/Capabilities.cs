@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace SharpBgfx;
+namespace SharpBgfx.Original;
 
 /// <summary>
 /// Contains information about the capabilities of the rendering device.

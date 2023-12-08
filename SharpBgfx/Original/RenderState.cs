@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SharpBgfx;
+namespace SharpBgfx.Original;
 
 /// <summary>
 /// Specifies state information used to configure rendering operations.

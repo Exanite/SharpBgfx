@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SharpBgfx;
+namespace SharpBgfx.Original;
 
 /// <summary>
 /// Maintains a data buffer that contains instancing data.

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SharpBgfx;
+namespace SharpBgfx.Original;
 
 /// <summary>
 /// Contains platform-specific data used to hook into the bgfx library.

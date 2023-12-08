@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 
-namespace SharpBgfx;
+namespace SharpBgfx.Original;
 
 /// <summary>
 /// Managed interface to the bgfx graphics library.
