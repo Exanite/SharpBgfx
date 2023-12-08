@@ -6,7 +6,7 @@ namespace SharpBgfx.Original;
 /// An interface for encoding a list of commands from multiple threads.
 /// Dispose of the encoder to finish submitting calls from the current thread.
 /// </summary>
-public unsafe struct Encoder : IDisposable, IEquatable<Encoder>
+public unsafe struct Encoder : IDisposable
 {
     internal readonly IntPtr ptr;
 
@@ -494,79 +494,8 @@ public unsafe struct Encoder : IDisposable, IEquatable<Encoder>
         NativeMethods.bgfx_end(ptr);
     }
 
-    /// <summary>
-    /// Determines whether the specified object is equal to this instance.
-    /// </summary>
-    /// <param name="other">The object to compare with this instance.</param>
-    /// <returns><c>true</c> if the specified object is equal to this instance; otherwise, <c>false</c>.</returns>
-    public bool Equals(Encoder other)
-    {
-        return ptr == other.ptr;
-    }
-
-    /// <summary>
-    /// Determines whether the specified <see cref="System.Object"/> is equal to this instance.
-    /// </summary>
-    /// <param name="obj">The <see cref="System.Object"/> to compare with this instance.</param>
-    /// <returns>
-    ///   <c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
-    /// </returns>
-    public override bool Equals(object obj)
-    {
-        var other = obj as Encoder?;
-        if (other == null)
-        {
-            return false;
-        }
-
-        return Equals(other);
-    }
-
-    /// <summary>
-    /// Returns a hash code for this instance.
-    /// </summary>
-    /// <returns>
-    /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
-    /// </returns>
-    public override int GetHashCode()
-    {
-        return ptr.GetHashCode();
-    }
-
-    /// <summary>
-    /// Returns a <see cref="System.String"/> that represents this instance.
-    /// </summary>
-    /// <returns>
-    /// A <see cref="System.String"/> that represents this instance.
-    /// </returns>
     public override string ToString()
     {
         return ptr.ToString();
-    }
-
-    /// <summary>
-    /// Implements the equality operator.
-    /// </summary>
-    /// <param name="left">The left side of the operator.</param>
-    /// <param name="right">The right side of the operator.</param>
-    /// <returns>
-    /// <c>true</c> if the two objects are equal; otherwise, <c>false</c>.
-    /// </returns>
-    public static bool operator ==(Encoder left, Encoder right)
-    {
-        return left.Equals(right);
-    }
-
-    /// <summary>
-    /// Implements the inequality operator.
-    /// </summary>
-    /// <param name="left">The left side of the operator.</param>
-    /// <param name="right">The right side of the operator.</param>
-    /// <returns>
-    /// <c>true</c> if the two objects are not equal; otherwise, <c>false</c>.
-    /// </returns>
-    public static bool operator !=(Encoder left, Encoder right)
-    {
-        return !left.Equals(right);
     }
 }

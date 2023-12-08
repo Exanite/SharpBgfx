@@ -5,7 +5,7 @@ namespace SharpBgfx.Original;
 /// <summary>
 /// Represents a loaded texture.
 /// </summary>
-public sealed unsafe class Texture : IDisposable, IEquatable<Texture>
+public sealed unsafe class Texture : IDisposable
 {
     internal readonly ushort handle;
 
@@ -445,89 +445,9 @@ public sealed unsafe class Texture : IDisposable, IEquatable<Texture>
         return NativeMethods.bgfx_get_direct_access_ptr(handle);
     }
 
-    /// <summary>
-    /// Determines whether the specified object is equal to this instance.
-    /// </summary>
-    /// <param name="other">The object to compare with this instance.</param>
-    /// <returns><c>true</c> if the specified object is equal to this instance; otherwise, <c>false</c>.</returns>
-    public bool Equals(Texture other)
-    {
-        if (ReferenceEquals(other, null))
-        {
-            return false;
-        }
-
-        if (ReferenceEquals(other, this))
-        {
-            return true;
-        }
-
-        return handle == other.handle;
-    }
-
-    /// <summary>
-    /// Determines whether the specified <see cref="System.Object"/> is equal to this instance.
-    /// </summary>
-    /// <param name="obj">The <see cref="System.Object"/> to compare with this instance.</param>
-    /// <returns>
-    ///   <c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
-    /// </returns>
-    public override bool Equals(object obj)
-    {
-        return Equals(obj as Texture);
-    }
-
-    /// <summary>
-    /// Returns a hash code for this instance.
-    /// </summary>
-    /// <returns>
-    /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
-    /// </returns>
-    public override int GetHashCode()
-    {
-        return handle.GetHashCode();
-    }
-
-    /// <summary>
-    /// Returns a <see cref="System.String"/> that represents this instance.
-    /// </summary>
-    /// <returns>
-    /// A <see cref="System.String"/> that represents this instance.
-    /// </returns>
     public override string ToString()
     {
         return string.Format("Handle: {0}", handle);
-    }
-
-    /// <summary>
-    /// Implements the equality operator.
-    /// </summary>
-    /// <param name="left">The left side of the operator.</param>
-    /// <param name="right">The right side of the operator.</param>
-    /// <returns>
-    /// <c>true</c> if the two objects are equal; otherwise, <c>false</c>.
-    /// </returns>
-    public static bool operator ==(Texture left, Texture right)
-    {
-        if (ReferenceEquals(left, null))
-        {
-            return ReferenceEquals(right, null);
-        }
-
-        return left.Equals(right);
-    }
-
-    /// <summary>
-    /// Implements the inequality operator.
-    /// </summary>
-    /// <param name="left">The left side of the operator.</param>
-    /// <param name="right">The right side of the operator.</param>
-    /// <returns>
-    /// <c>true</c> if the two objects are not equal; otherwise, <c>false</c>.
-    /// </returns>
-    public static bool operator !=(Texture left, Texture right)
-    {
-        return !(left == right);
     }
 
     internal struct TextureInfo

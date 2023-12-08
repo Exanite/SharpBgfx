@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SharpBgfx.Original;
+namespace SharpBgfx;
 
 /// <summary>
 /// Maintains a transient vertex buffer.
@@ -9,7 +9,7 @@ namespace SharpBgfx.Original;
 /// The contents of the buffer are valid for the current frame only.
 /// You must call SetVertexBuffer with the buffer or a leak could occur.
 /// </remarks>
-public struct TransientVertexBuffer : IEquatable<TransientVertexBuffer>
+public struct TransientVertexBuffer
 {
     private int startVertex;
     private ushort stride;
@@ -52,79 +52,8 @@ public struct TransientVertexBuffer : IEquatable<TransientVertexBuffer>
         return NativeMethods.bgfx_get_avail_transient_vertex_buffer(count, ref layout.data);
     }
 
-    /// <summary>
-    /// Determines whether the specified object is equal to this instance.
-    /// </summary>
-    /// <param name="other">The object to compare with this instance.</param>
-    /// <returns><c>true</c> if the specified object is equal to this instance; otherwise, <c>false</c>.</returns>
-    public bool Equals(TransientVertexBuffer other)
-    {
-        return handle == other.handle && Data == other.Data;
-    }
-
-    /// <summary>
-    /// Determines whether the specified <see cref="System.Object"/> is equal to this instance.
-    /// </summary>
-    /// <param name="obj">The <see cref="System.Object"/> to compare with this instance.</param>
-    /// <returns>
-    ///   <c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
-    /// </returns>
-    public override bool Equals(object obj)
-    {
-        var other = obj as TransientVertexBuffer?;
-        if (other == null)
-        {
-            return false;
-        }
-
-        return Equals(other);
-    }
-
-    /// <summary>
-    /// Returns a hash code for this instance.
-    /// </summary>
-    /// <returns>
-    /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
-    /// </returns>
-    public override int GetHashCode()
-    {
-        return (handle.GetHashCode() >> 13) ^ Data.GetHashCode();
-    }
-
-    /// <summary>
-    /// Returns a <see cref="System.String"/> that represents this instance.
-    /// </summary>
-    /// <returns>
-    /// A <see cref="System.String"/> that represents this instance.
-    /// </returns>
     public override string ToString()
     {
         return string.Format("Handle: {0}", handle);
-    }
-
-    /// <summary>
-    /// Implements the equality operator.
-    /// </summary>
-    /// <param name="left">The left side of the operator.</param>
-    /// <param name="right">The right side of the operator.</param>
-    /// <returns>
-    /// <c>true</c> if the two objects are equal; otherwise, <c>false</c>.
-    /// </returns>
-    public static bool operator ==(TransientVertexBuffer left, TransientVertexBuffer right)
-    {
-        return left.Equals(right);
-    }
-
-    /// <summary>
-    /// Implements the inequality operator.
-    /// </summary>
-    /// <param name="left">The left side of the operator.</param>
-    /// <param name="right">The right side of the operator.</param>
-    /// <returns>
-    /// <c>true</c> if the two objects are not equal; otherwise, <c>false</c>.
-    /// </returns>
-    public static bool operator !=(TransientVertexBuffer left, TransientVertexBuffer right)
-    {
-        return !left.Equals(right);
     }
 }
