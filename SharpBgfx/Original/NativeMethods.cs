@@ -5,8 +5,6 @@
 // namespace SharpBgfx {
 //     [SuppressUnmanagedCodeSecurity]
 //     unsafe static class NativeMethods {
-// #pragma warning disable IDE1006 // Naming Styles
-//
 //         [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
 //         public static extern void bgfx_update_texture_2d (ushort handle, ushort layer, byte mip, ushort x, ushort y, ushort width, ushort height, MemoryBlock.DataPtr* memory, ushort pitch);
 //
@@ -536,13 +534,5 @@
 //         [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
 //         public static extern void bgfx_encoder_blit(IntPtr encoder, ushort id, ushort dst, byte dstMip, ushort dstX, ushort dstY, ushort dstZ, ushort src,
 //                                                     byte srcMip, ushort srcX, ushort srcY, ushort srcZ, ushort width, ushort height, ushort depth);
-//
-// #pragma warning restore IDE1006 // Naming Styles
-//
-// #if DEBUG
-//         const string DllName = "bgfx_debug.dll";
-// #else
-//         const string DllName = "bgfx.dll";
-// #endif
 //     }
 // }
