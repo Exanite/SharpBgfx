@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
-using SharpBgfx.Bindings;
 
 namespace SharpBgfx.Original;
 
@@ -23,8 +21,6 @@ public static unsafe class Bgfx
     /// <returns><c>true</c> if both space requirements are satisfied and the buffers were allocated.</returns>
     public static bool AllocateTransientBuffers(int vertexCount, VertexLayout layout, int indexCount, out TransientVertexBuffer vertexBuffer, out TransientIndexBuffer indexBuffer)
     {
-        return bgfx.alloc_instance_data_buffer()
-
         return NativeMethods.bgfx_alloc_transient_buffers(out vertexBuffer, ref layout.data, (ushort)vertexCount, out indexBuffer, (ushort)indexCount);
     }
 
