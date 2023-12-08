@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
+using SharpBgfx.Bindings;
 
 namespace SharpBgfx.Original;
 
@@ -21,7 +22,7 @@ public static unsafe class Bgfx
     /// <returns><c>true</c> if both space requirements are satisfied and the buffers were allocated.</returns>
     public static bool AllocateTransientBuffers(int vertexCount, VertexLayout layout, int indexCount, out TransientVertexBuffer vertexBuffer, out TransientIndexBuffer indexBuffer)
     {
-        return NativeMethods.bgfx_alloc_transient_buffers(out vertexBuffer, ref layout.data, (ushort)vertexCount, out indexBuffer, (ushort)indexCount);
+        return bgfx.alloc_transient_buffers(out vertexBuffer, ref layout.data, (ushort)vertexCount, out indexBuffer, (ushort)indexCount);
     }
 
     /// <summary>
@@ -35,7 +36,7 @@ public static unsafe class Bgfx
     /// <param name="index">The index of the vertex within the stream.</param>
     public static void VertexPack(float* input, bool inputNormalized, VertexAttributeUsage attribute, VertexLayout layout, IntPtr data, int index = 0)
     {
-        NativeMethods.bgfx_vertex_pack(input, inputNormalized, attribute, ref layout.data, data, index);
+        bgfx.vertex_pack(input, inputNormalized, attribute, ref layout.data, data, index);
     }
 
     /// <summary>
@@ -48,7 +49,7 @@ public static unsafe class Bgfx
     /// <param name="index">The index of the vertex within the stream.</param>
     public static void VertexUnpack(float* output, VertexAttributeUsage attribute, VertexLayout layout, IntPtr data, int index = 0)
     {
-        NativeMethods.bgfx_vertex_unpack(output, attribute, ref layout.data, data, index);
+        bgfx.vertex_unpack(output, attribute, ref layout.data, data, index);
     }
 
     /// <summary>
@@ -61,7 +62,7 @@ public static unsafe class Bgfx
     /// <param name="count">The number of vertices to convert.</param>
     public static void VertexConvert(VertexLayout destinationLayout, IntPtr destinationData, VertexLayout sourceLayout, IntPtr sourceData, int count = 1)
     {
-        NativeMethods.bgfx_vertex_convert(ref destinationLayout.data, destinationData, ref sourceLayout.data, sourceData, count);
+        bgfx.vertex_convert(ref destinationLayout.data, destinationData, ref sourceLayout.data, sourceData, count);
     }
 
     /// <summary>
@@ -78,7 +79,7 @@ public static unsafe class Bgfx
     public static int WeldVertices(VertexLayout layout, IntPtr data, int count, out int[] remappingTable, float epsilon = 0.001f)
     {
         var output = stackalloc ushort[count];
-        var result = NativeMethods.bgfx_weld_vertices(output, ref layout.data, data, (ushort)count, epsilon);
+        var result = bgfx.weld_vertices(output, ref layout.data, data, (ushort)count, epsilon);
 
         remappingTable = new int[count];
         for (var i = 0; i < count; i++)
@@ -102,7 +103,7 @@ public static unsafe class Bgfx
     /// </remarks>
     public static void ImageSwizzleBgra8(IntPtr destination, int width, int height, int pitch, IntPtr source)
     {
-        NativeMethods.bgfx_image_swizzle_bgra8(destination, width, height, pitch, source);
+        bgfx.image_swizzle_bgra8(destination, width, height, pitch, source);
     }
 
     /// <summary>
@@ -118,7 +119,7 @@ public static unsafe class Bgfx
     /// </remarks>
     public static void ImageRgba8Downsample2x2(IntPtr destination, int width, int height, int pitch, IntPtr source)
     {
-        NativeMethods.bgfx_image_rgba8_downsample_2x2(destination, width, height, pitch, source);
+        bgfx.image_rgba8_downsample_2x2(destination, width, height, pitch, source);
     }
 
     /// <summary>
@@ -127,7 +128,7 @@ public static unsafe class Bgfx
     /// <param name="platformData">A collection of platform-specific data pointers.</param>
     public static void SetPlatformData(PlatformData platformData)
     {
-        NativeMethods.bgfx_set_platform_data(ref platformData);
+        bgfx.set_platform_data(ref platformData);
     }
 
     /// <summary>
@@ -137,7 +138,7 @@ public static unsafe class Bgfx
     public static void SetWindowHandle(IntPtr windowHandle)
     {
         var data = new PlatformData { WindowHandle = windowHandle };
-        NativeMethods.bgfx_set_platform_data(ref data);
+        bgfx.set_platform_data(ref data);
     }
 
     /// <summary>
@@ -146,7 +147,7 @@ public static unsafe class Bgfx
     /// <returns>A structure containing API context information.</returns>
     public static InternalData GetInternalData()
     {
-        return *NativeMethods.bgfx_get_internal_data();
+        return *bgfx.get_internal_data();
     }
 
     /// <summary>
@@ -165,7 +166,7 @@ public static unsafe class Bgfx
     /// </remarks>
     public static RenderFrameResult ManuallyRenderFrame(int timeoutMs = -1)
     {
-        return NativeMethods.bgfx_render_frame(timeoutMs);
+        return bgfx.render_frame(timeoutMs);
     }
 
     /// <summary>
@@ -174,7 +175,7 @@ public static unsafe class Bgfx
     /// <returns>The currently active rendering backend.</returns>
     public static RendererBackend GetCurrentBackend()
     {
-        return NativeMethods.bgfx_get_renderer_type();
+        return bgfx.get_renderer_type();
     }
 
     /// <summary>
@@ -182,7 +183,7 @@ public static unsafe class Bgfx
     /// </summary>
     public static void Shutdown()
     {
-        NativeMethods.bgfx_shutdown();
+        bgfx.shutdown();
         CallbackShim.FreeShim();
     }
 
@@ -192,7 +193,7 @@ public static unsafe class Bgfx
     /// <returns>Information about the capabilities of the device.</returns>
     public static Capabilities GetCaps()
     {
-        return new Capabilities(NativeMethods.bgfx_get_caps());
+        return new Capabilities(bgfx.get_caps());
     }
 
     /// <summary>
@@ -201,7 +202,7 @@ public static unsafe class Bgfx
     /// <returns>Information about frame performance.</returns>
     public static PerfStats GetStats()
     {
-        return new PerfStats(NativeMethods.bgfx_get_stats());
+        return new PerfStats(bgfx.get_stats());
     }
 
 
@@ -214,7 +215,7 @@ public static unsafe class Bgfx
     /// <param name="format">The format of the backbuffer.</param>
     public static void Reset(int width, int height, ResetFlags flags = ResetFlags.None, TextureFormat format = TextureFormat.Count)
     {
-        NativeMethods.bgfx_reset(width, height, flags, format);
+        bgfx.reset(width, height, flags, format);
     }
 
     /// <summary>
@@ -229,7 +230,7 @@ public static unsafe class Bgfx
     /// </remarks>
     public static int Frame(bool capture = false)
     {
-        return NativeMethods.bgfx_frame(capture);
+        return bgfx.frame(capture);
     }
 
     /// <summary>
@@ -240,7 +241,7 @@ public static unsafe class Bgfx
     public static bool Init(InitSettings settings = null)
     {
         InitSettings.Native native;
-        NativeMethods.bgfx_init_ctor(&native);
+        bgfx.init_ctor(&native);
 
         settings = settings ?? new InitSettings();
         native.Backend = settings.Backend;
@@ -257,7 +258,7 @@ public static unsafe class Bgfx
         native.Callbacks = CallbackShim.CreateShim(settings.CallbackHandler ?? new DefaultCallbackHandler());
         native.PlatformData = settings.PlatformData;
 
-        return NativeMethods.bgfx_init(&native);
+        return bgfx.init(&native);
     }
 
     /// <summary>
@@ -267,7 +268,7 @@ public static unsafe class Bgfx
     public static RendererBackend[] GetSupportedBackends()
     {
         var types = new RendererBackend[(int)RendererBackend.Default];
-        var count = NativeMethods.bgfx_get_supported_renderers((byte)types.Length, types);
+        var count = bgfx.get_supported_renderers((byte)types.Length, types);
 
         return types.Take(count).ToArray();
     }
@@ -279,7 +280,7 @@ public static unsafe class Bgfx
     /// <returns>The friendly name of the specified backend.</returns>
     public static string GetBackendName(RendererBackend backend)
     {
-        return Marshal.PtrToStringAnsi(new IntPtr(NativeMethods.bgfx_get_renderer_name(backend)));
+        return Marshal.PtrToStringAnsi(new IntPtr(bgfx.get_renderer_name(backend)));
     }
 
     /// <summary>
@@ -288,7 +289,7 @@ public static unsafe class Bgfx
     /// <param name="features">The set of debug features to enable.</param>
     public static void SetDebugFeatures(DebugFeatures features)
     {
-        NativeMethods.bgfx_set_debug(features);
+        bgfx.set_debug(features);
     }
 
     /// <summary>
@@ -297,7 +298,7 @@ public static unsafe class Bgfx
     /// <param name="marker">The user-defined name of the marker.</param>
     public static void SetDebugMarker(string marker)
     {
-        NativeMethods.bgfx_set_marker(marker);
+        bgfx.set_marker(marker);
     }
 
     /// <summary>
@@ -308,7 +309,7 @@ public static unsafe class Bgfx
     public static void DebugTextClear(DebugColor color = DebugColor.Black, bool smallText = false)
     {
         var attr = (byte)((byte)color << 4);
-        NativeMethods.bgfx_dbg_text_clear(attr, smallText);
+        bgfx.dbg_text_clear(attr, smallText);
     }
 
     /// <summary>
@@ -336,7 +337,7 @@ public static unsafe class Bgfx
     public static void DebugTextWrite(int x, int y, DebugColor foreColor, DebugColor backColor, string message)
     {
         var attr = (byte)(((byte)backColor << 4) | (byte)foreColor);
-        NativeMethods.bgfx_dbg_text_printf((ushort)x, (ushort)y, attr, "%s", message);
+        bgfx.dbg_text_printf((ushort)x, (ushort)y, attr, "%s", message);
     }
 
     /// <summary>
@@ -354,7 +355,7 @@ public static unsafe class Bgfx
         format[0] = (byte)'%';
         format[1] = (byte)'s';
         format[2] = 0;
-        NativeMethods.bgfx_dbg_text_printf((ushort)x, (ushort)y, attr, format, message);
+        bgfx.dbg_text_printf((ushort)x, (ushort)y, attr, format, message);
     }
 
     /// <summary>
@@ -368,7 +369,7 @@ public static unsafe class Bgfx
     /// <param name="pitch">The pitch of each line in the image data.</param>
     public static void DebugTextImage(int x, int y, int width, int height, IntPtr data, int pitch)
     {
-        NativeMethods.bgfx_dbg_text_image((ushort)x, (ushort)y, (ushort)width, (ushort)height, data, (ushort)pitch);
+        bgfx.dbg_text_image((ushort)x, (ushort)y, (ushort)width, (ushort)height, data, (ushort)pitch);
     }
 
     /// <summary>
@@ -384,7 +385,7 @@ public static unsafe class Bgfx
     {
         fixed (byte* ptr = data)
         {
-            NativeMethods.bgfx_dbg_text_image((ushort)x, (ushort)y, (ushort)width, (ushort)height, new IntPtr(ptr), (ushort)pitch);
+            bgfx.dbg_text_image((ushort)x, (ushort)y, (ushort)width, (ushort)height, new IntPtr(ptr), (ushort)pitch);
         }
     }
 
@@ -395,7 +396,7 @@ public static unsafe class Bgfx
     /// <param name="name">The name of the view.</param>
     public static void SetViewName(ushort id, string name)
     {
-        NativeMethods.bgfx_set_view_name(id, name);
+        bgfx.set_view_name(id, name);
     }
 
     /// <summary>
@@ -408,7 +409,7 @@ public static unsafe class Bgfx
     /// <param name="height">The height of the viewport, in pixels.</param>
     public static void SetViewRect(ushort id, int x, int y, int width, int height)
     {
-        NativeMethods.bgfx_set_view_rect(id, (ushort)x, (ushort)y, (ushort)width, (ushort)height);
+        bgfx.set_view_rect(id, (ushort)x, (ushort)y, (ushort)width, (ushort)height);
     }
 
     /// <summary>
@@ -420,7 +421,7 @@ public static unsafe class Bgfx
     /// <param name="ratio">The ratio with which to automatically size the viewport.</param>
     public static void SetViewRect(ushort id, int x, int y, BackbufferRatio ratio)
     {
-        NativeMethods.bgfx_set_view_rect_auto(id, (ushort)x, (ushort)y, ratio);
+        bgfx.set_view_rect_auto(id, (ushort)x, (ushort)y, ratio);
     }
 
     /// <summary>
@@ -436,7 +437,7 @@ public static unsafe class Bgfx
     /// </remarks>
     public static void SetViewScissor(ushort id, int x, int y, int width, int height)
     {
-        NativeMethods.bgfx_set_view_scissor(id, (ushort)x, (ushort)y, (ushort)width, (ushort)height);
+        bgfx.set_view_scissor(id, (ushort)x, (ushort)y, (ushort)width, (ushort)height);
     }
 
     /// <summary>
@@ -449,7 +450,7 @@ public static unsafe class Bgfx
     /// <param name="stencil">The value to fill the stencil buffer.</param>
     public static void SetViewClear(ushort id, ClearTargets targets, uint colorRgba, float depth = 1.0f, byte stencil = 0)
     {
-        NativeMethods.bgfx_set_view_clear(id, targets, colorRgba, depth, stencil);
+        bgfx.set_view_clear(id, targets, colorRgba, depth, stencil);
     }
 
     /// <summary>
@@ -481,7 +482,7 @@ public static unsafe class Bgfx
         byte rt6 = byte.MaxValue,
         byte rt7 = byte.MaxValue)
     {
-        NativeMethods.bgfx_set_view_clear_mrt(
+        bgfx.set_view_clear_mrt(
             id,
             targets,
             depth,
@@ -508,7 +509,7 @@ public static unsafe class Bgfx
     /// </remarks>
     public static void SetPaletteColor(byte index, float* color)
     {
-        NativeMethods.bgfx_set_palette_color(index, color);
+        bgfx.set_palette_color(index, color);
     }
 
     /// <summary>
@@ -518,7 +519,7 @@ public static unsafe class Bgfx
     /// <param name="mode">The sorting mode to use.</param>
     public static void SetViewMode(ushort id, ViewMode mode)
     {
-        NativeMethods.bgfx_set_view_mode(id, mode);
+        bgfx.set_view_mode(id, mode);
     }
 
     /// <summary>
@@ -529,7 +530,7 @@ public static unsafe class Bgfx
     /// <param name="projection">The 4x4 projection transform matrix.</param>
     public static void SetViewTransform(ushort id, float* view, float* projection)
     {
-        NativeMethods.bgfx_set_view_transform(id, view, projection);
+        bgfx.set_view_transform(id, view, projection);
     }
 
     /// <summary>
@@ -539,7 +540,7 @@ public static unsafe class Bgfx
     /// <param name="frameBuffer">The frame buffer to set.</param>
     public static void SetViewFrameBuffer(ushort id, FrameBuffer frameBuffer)
     {
-        NativeMethods.bgfx_set_view_frame_buffer(id, frameBuffer.handle);
+        bgfx.set_view_frame_buffer(id, frameBuffer.handle);
     }
 
     /// <summary>
@@ -550,7 +551,7 @@ public static unsafe class Bgfx
     /// <returns>An index into the matrix cache to allow reusing the matrix in other calls.</returns>
     public static int SetTransform(float* matrix, int count = 1)
     {
-        return NativeMethods.bgfx_set_transform(matrix, (ushort)count);
+        return bgfx.set_transform(matrix, (ushort)count);
     }
 
     /// <summary>
@@ -560,7 +561,7 @@ public static unsafe class Bgfx
     /// <param name="count">The number of matrices to set from the cache.</param>
     public static void SetTransform(int cacheIndex, int count = 1)
     {
-        NativeMethods.bgfx_set_transform_cached(cacheIndex, (ushort)count);
+        bgfx.set_transform_cached(cacheIndex, (ushort)count);
     }
 
     /// <summary>
@@ -575,7 +576,7 @@ public static unsafe class Bgfx
     /// </returns>
     public static int SetScissor(int x, int y, int width, int height)
     {
-        return NativeMethods.bgfx_set_scissor((ushort)x, (ushort)y, (ushort)width, (ushort)height);
+        return bgfx.set_scissor((ushort)x, (ushort)y, (ushort)width, (ushort)height);
     }
 
     /// <summary>
@@ -584,7 +585,7 @@ public static unsafe class Bgfx
     /// <param name="cacheIndex">The index of the cached scissor rectangle, or -1 to unset.</param>
     public static void SetScissor(int cacheIndex = -1)
     {
-        NativeMethods.bgfx_set_scissor_cached((ushort)cacheIndex);
+        bgfx.set_scissor_cached((ushort)cacheIndex);
     }
 
     /// <summary>
@@ -593,7 +594,7 @@ public static unsafe class Bgfx
     /// <param name="indexBuffer">The index buffer to set.</param>
     public static void SetIndexBuffer(IndexBuffer indexBuffer)
     {
-        NativeMethods.bgfx_set_index_buffer(indexBuffer.handle, 0, -1);
+        bgfx.set_index_buffer(indexBuffer.handle, 0, -1);
     }
 
     /// <summary>
@@ -604,7 +605,7 @@ public static unsafe class Bgfx
     /// <param name="count">The number of indices to pull from the buffer.</param>
     public static void SetIndexBuffer(IndexBuffer indexBuffer, int firstIndex, int count)
     {
-        NativeMethods.bgfx_set_index_buffer(indexBuffer.handle, firstIndex, count);
+        bgfx.set_index_buffer(indexBuffer.handle, firstIndex, count);
     }
 
     /// <summary>
@@ -614,7 +615,7 @@ public static unsafe class Bgfx
     /// <param name="vertexBuffer">The vertex buffer to set.</param>
     public static void SetVertexBuffer(int stream, VertexBuffer vertexBuffer)
     {
-        NativeMethods.bgfx_set_vertex_buffer((byte)stream, vertexBuffer.handle, 0, -1);
+        bgfx.set_vertex_buffer((byte)stream, vertexBuffer.handle, 0, -1);
     }
 
     /// <summary>
@@ -626,7 +627,7 @@ public static unsafe class Bgfx
     /// <param name="count">The number of vertices to pull from the buffer.</param>
     public static void SetVertexBuffer(int stream, VertexBuffer vertexBuffer, int firstVertex, int count)
     {
-        NativeMethods.bgfx_set_vertex_buffer((byte)stream, vertexBuffer.handle, firstVertex, count);
+        bgfx.set_vertex_buffer((byte)stream, vertexBuffer.handle, firstVertex, count);
     }
 
     /// <summary>
@@ -635,7 +636,7 @@ public static unsafe class Bgfx
     /// <param name="indexBuffer">The index buffer to set.</param>
     public static void SetIndexBuffer(DynamicIndexBuffer indexBuffer)
     {
-        NativeMethods.bgfx_set_dynamic_index_buffer(indexBuffer.handle, 0, -1);
+        bgfx.set_dynamic_index_buffer(indexBuffer.handle, 0, -1);
     }
 
     /// <summary>
@@ -646,7 +647,7 @@ public static unsafe class Bgfx
     /// <param name="count">The number of indices to pull from the buffer.</param>
     public static void SetIndexBuffer(DynamicIndexBuffer indexBuffer, int firstIndex, int count)
     {
-        NativeMethods.bgfx_set_dynamic_index_buffer(indexBuffer.handle, firstIndex, count);
+        bgfx.set_dynamic_index_buffer(indexBuffer.handle, firstIndex, count);
     }
 
     /// <summary>
@@ -656,7 +657,7 @@ public static unsafe class Bgfx
     /// <param name="vertexBuffer">The vertex buffer to set.</param>
     public static void SetVertexBuffer(int stream, DynamicVertexBuffer vertexBuffer)
     {
-        NativeMethods.bgfx_set_dynamic_vertex_buffer((byte)stream, vertexBuffer.handle, 0, -1);
+        bgfx.set_dynamic_vertex_buffer((byte)stream, vertexBuffer.handle, 0, -1);
     }
 
     /// <summary>
@@ -668,7 +669,7 @@ public static unsafe class Bgfx
     /// <param name="count">The number of vertices to pull from the buffer.</param>
     public static void SetVertexBuffer(int stream, DynamicVertexBuffer vertexBuffer, int startVertex, int count)
     {
-        NativeMethods.bgfx_set_dynamic_vertex_buffer((byte)stream, vertexBuffer.handle, startVertex, count);
+        bgfx.set_dynamic_vertex_buffer((byte)stream, vertexBuffer.handle, startVertex, count);
     }
 
     /// <summary>
@@ -677,7 +678,7 @@ public static unsafe class Bgfx
     /// <param name="indexBuffer">The index buffer to set.</param>
     public static void SetIndexBuffer(TransientIndexBuffer indexBuffer)
     {
-        NativeMethods.bgfx_set_transient_index_buffer(ref indexBuffer, 0, -1);
+        bgfx.set_transient_index_buffer(ref indexBuffer, 0, -1);
     }
 
     /// <summary>
@@ -688,7 +689,7 @@ public static unsafe class Bgfx
     /// <param name="count">The number of indices to pull from the buffer.</param>
     public static void SetIndexBuffer(TransientIndexBuffer indexBuffer, int firstIndex, int count)
     {
-        NativeMethods.bgfx_set_transient_index_buffer(ref indexBuffer, firstIndex, count);
+        bgfx.set_transient_index_buffer(ref indexBuffer, firstIndex, count);
     }
 
     /// <summary>
@@ -698,7 +699,7 @@ public static unsafe class Bgfx
     /// <param name="vertexBuffer">The vertex buffer to set.</param>
     public static void SetVertexBuffer(int stream, TransientVertexBuffer vertexBuffer)
     {
-        NativeMethods.bgfx_set_transient_vertex_buffer((byte)stream, ref vertexBuffer, 0, -1);
+        bgfx.set_transient_vertex_buffer((byte)stream, ref vertexBuffer, 0, -1);
     }
 
     /// <summary>
@@ -710,7 +711,7 @@ public static unsafe class Bgfx
     /// <param name="count">The number of vertices to pull from the buffer.</param>
     public static void SetVertexBuffer(int stream, TransientVertexBuffer vertexBuffer, int firstVertex, int count)
     {
-        NativeMethods.bgfx_set_transient_vertex_buffer((byte)stream, ref vertexBuffer, firstVertex, count);
+        bgfx.set_transient_vertex_buffer((byte)stream, ref vertexBuffer, firstVertex, count);
     }
 
     /// <summary>
@@ -719,7 +720,7 @@ public static unsafe class Bgfx
     /// <param name="count">The number of auto-generated vertices.</param>
     public static void SetVertexCount(int count)
     {
-        NativeMethods.bgfx_set_vertex_count(count);
+        bgfx.set_vertex_count(count);
     }
 
     /// <summary>
@@ -728,7 +729,7 @@ public static unsafe class Bgfx
     /// <param name="count">The number of auto-generated instances.</param>
     public static void SetInstanceCount(int count)
     {
-        NativeMethods.bgfx_set_instance_count(count);
+        bgfx.set_instance_count(count);
     }
 
     /// <summary>
@@ -739,7 +740,7 @@ public static unsafe class Bgfx
     /// <param name="count">The number of entries to pull from the buffer.</param>
     public static void SetInstanceDataBuffer(ref InstanceDataBuffer instanceData, int start = 0, int count = -1)
     {
-        NativeMethods.bgfx_set_instance_data_buffer(ref instanceData.data, (uint)start, (uint)count);
+        bgfx.set_instance_data_buffer(ref instanceData.data, (uint)start, (uint)count);
     }
 
     /// <summary>
@@ -750,7 +751,7 @@ public static unsafe class Bgfx
     /// <param name="count">The number of vertices to pull from the buffer.</param>
     public static void SetInstanceDataBuffer(VertexBuffer vertexBuffer, int firstVertex, int count)
     {
-        NativeMethods.bgfx_set_instance_data_from_vertex_buffer(vertexBuffer.handle, firstVertex, count);
+        bgfx.set_instance_data_from_vertex_buffer(vertexBuffer.handle, firstVertex, count);
     }
 
     /// <summary>
@@ -761,7 +762,7 @@ public static unsafe class Bgfx
     /// <param name="count">The number of vertices to pull from the buffer.</param>
     public static void SetInstanceDataBuffer(DynamicVertexBuffer vertexBuffer, int firstVertex, int count)
     {
-        NativeMethods.bgfx_set_instance_data_from_dynamic_vertex_buffer(vertexBuffer.handle, firstVertex, count);
+        bgfx.set_instance_data_from_dynamic_vertex_buffer(vertexBuffer.handle, firstVertex, count);
     }
 
     /// <summary>
@@ -772,7 +773,7 @@ public static unsafe class Bgfx
     /// <param name="arraySize">The size of the data array, if the uniform is an array.</param>
     public static void SetUniform(Uniform uniform, float value, int arraySize = 1)
     {
-        NativeMethods.bgfx_set_uniform(uniform.handle, &value, (ushort)arraySize);
+        bgfx.set_uniform(uniform.handle, &value, (ushort)arraySize);
     }
 
     /// <summary>
@@ -783,7 +784,7 @@ public static unsafe class Bgfx
     /// <param name="arraySize">The size of the data array, if the uniform is an array.</param>
     public static void SetUniform(Uniform uniform, void* value, int arraySize = 1)
     {
-        NativeMethods.bgfx_set_uniform(uniform.handle, value, (ushort)arraySize);
+        bgfx.set_uniform(uniform.handle, value, (ushort)arraySize);
     }
 
     /// <summary>
@@ -794,7 +795,7 @@ public static unsafe class Bgfx
     /// <param name="arraySize">The size of the data array, if the uniform is an array.</param>
     public static void SetUniform(Uniform uniform, IntPtr value, int arraySize = 1)
     {
-        NativeMethods.bgfx_set_uniform(uniform.handle, value.ToPointer(), (ushort)arraySize);
+        bgfx.set_uniform(uniform.handle, value.ToPointer(), (ushort)arraySize);
     }
 
     /// <summary>
@@ -805,7 +806,7 @@ public static unsafe class Bgfx
     /// <param name="texture">The texture to set.</param>
     public static void SetTexture(byte textureUnit, Uniform sampler, Texture texture)
     {
-        NativeMethods.bgfx_set_texture(textureUnit, sampler.handle, texture.handle, uint.MaxValue);
+        bgfx.set_texture(textureUnit, sampler.handle, texture.handle, uint.MaxValue);
     }
 
     /// <summary>
@@ -817,7 +818,7 @@ public static unsafe class Bgfx
     /// <param name="flags">Sampling flags that override the default flags in the texture itself.</param>
     public static void SetTexture(byte textureUnit, Uniform sampler, Texture texture, TextureFlags flags)
     {
-        NativeMethods.bgfx_set_texture(textureUnit, sampler.handle, texture.handle, (uint)flags);
+        bgfx.set_texture(textureUnit, sampler.handle, texture.handle, (uint)flags);
     }
 
     /// <summary>
@@ -830,7 +831,7 @@ public static unsafe class Bgfx
     /// <param name="access">Access control flags.</param>
     public static void SetComputeImage(byte stage, Texture texture, byte mip, ComputeBufferAccess access, TextureFormat format = TextureFormat.Unknown)
     {
-        NativeMethods.bgfx_set_image(stage, texture.handle, mip, format, access);
+        bgfx.set_image(stage, texture.handle, mip, format, access);
     }
 
     /// <summary>
@@ -841,7 +842,7 @@ public static unsafe class Bgfx
     /// <param name="access">Access control flags.</param>
     public static void SetComputeBuffer(byte stage, IndexBuffer buffer, ComputeBufferAccess access)
     {
-        NativeMethods.bgfx_set_compute_index_buffer(stage, buffer.handle, access);
+        bgfx.set_compute_index_buffer(stage, buffer.handle, access);
     }
 
     /// <summary>
@@ -852,7 +853,7 @@ public static unsafe class Bgfx
     /// <param name="access">Access control flags.</param>
     public static void SetComputeBuffer(byte stage, VertexBuffer buffer, ComputeBufferAccess access)
     {
-        NativeMethods.bgfx_set_compute_vertex_buffer(stage, buffer.handle, access);
+        bgfx.set_compute_vertex_buffer(stage, buffer.handle, access);
     }
 
     /// <summary>
@@ -863,7 +864,7 @@ public static unsafe class Bgfx
     /// <param name="access">Access control flags.</param>
     public static void SetComputeBuffer(byte stage, DynamicIndexBuffer buffer, ComputeBufferAccess access)
     {
-        NativeMethods.bgfx_set_compute_dynamic_index_buffer(stage, buffer.handle, access);
+        bgfx.set_compute_dynamic_index_buffer(stage, buffer.handle, access);
     }
 
     /// <summary>
@@ -874,7 +875,7 @@ public static unsafe class Bgfx
     /// <param name="access">Access control flags.</param>
     public static void SetComputeBuffer(byte stage, DynamicVertexBuffer buffer, ComputeBufferAccess access)
     {
-        NativeMethods.bgfx_set_compute_dynamic_vertex_buffer(stage, buffer.handle, access);
+        bgfx.set_compute_dynamic_vertex_buffer(stage, buffer.handle, access);
     }
 
     /// <summary>
@@ -885,7 +886,7 @@ public static unsafe class Bgfx
     /// <param name="access">Access control flags.</param>
     public static void SetComputeBuffer(byte stage, IndirectBuffer buffer, ComputeBufferAccess access)
     {
-        NativeMethods.bgfx_set_compute_indirect_buffer(stage, buffer.handle, access);
+        bgfx.set_compute_indirect_buffer(stage, buffer.handle, access);
     }
 
     /// <summary>
@@ -895,7 +896,7 @@ public static unsafe class Bgfx
     /// <returns>The number of draw calls.</returns>
     public static int Touch(ushort id)
     {
-        return NativeMethods.bgfx_touch(id);
+        return bgfx.touch(id);
     }
 
     /// <summary>
@@ -904,7 +905,7 @@ public static unsafe class Bgfx
     /// <param name="id">The index of the view to reset.</param>
     public static void ResetView(ushort id)
     {
-        NativeMethods.bgfx_reset_view(id);
+        bgfx.reset_view(id);
     }
 
     /// <summary>
@@ -917,7 +918,7 @@ public static unsafe class Bgfx
     /// <returns>The number of draw calls.</returns>
     public static int Submit(ushort id, Program program, int depth = 0, bool preserveState = false)
     {
-        return NativeMethods.bgfx_submit(id, program.handle, depth, preserveState);
+        return bgfx.submit(id, program.handle, depth, preserveState);
     }
 
     /// <summary>
@@ -931,7 +932,7 @@ public static unsafe class Bgfx
     /// <returns>The number of draw calls.</returns>
     public static int Submit(ushort id, Program program, OcclusionQuery query, int depth = 0, bool preserveState = false)
     {
-        return NativeMethods.bgfx_submit_occlusion_query(id, program.handle, query.handle, depth, preserveState);
+        return bgfx.submit_occlusion_query(id, program.handle, query.handle, depth, preserveState);
     }
 
     /// <summary>
@@ -947,7 +948,7 @@ public static unsafe class Bgfx
     /// <returns>The number of draw calls.</returns>
     public static int Submit(ushort id, Program program, IndirectBuffer indirectBuffer, int startIndex = 0, int count = 1, int depth = 0, bool preserveState = false)
     {
-        return NativeMethods.bgfx_submit_indirect(id, program.handle, indirectBuffer.handle, (ushort)startIndex, (ushort)count, depth, preserveState);
+        return bgfx.submit_indirect(id, program.handle, indirectBuffer.handle, (ushort)startIndex, (ushort)count, depth, preserveState);
     }
 
     /// <summary>
@@ -955,7 +956,7 @@ public static unsafe class Bgfx
     /// </summary>
     public static void Discard()
     {
-        NativeMethods.bgfx_discard();
+        bgfx.discard();
     }
 
     /// <summary>
@@ -968,7 +969,7 @@ public static unsafe class Bgfx
     /// <param name="zCount">The size of the job in the third dimension.</param>
     public static void Dispatch(ushort id, Program program, int xCount = 1, int yCount = 1, int zCount = 1)
     {
-        NativeMethods.bgfx_dispatch(id, program.handle, (uint)xCount, (uint)yCount, (uint)zCount);
+        bgfx.dispatch(id, program.handle, (uint)xCount, (uint)yCount, (uint)zCount);
     }
 
     /// <summary>
@@ -981,7 +982,7 @@ public static unsafe class Bgfx
     /// <param name="count">The number of commands to process from the buffer.</param>
     public static void Dispatch(ushort id, Program program, IndirectBuffer indirectBuffer, int startIndex = 0, int count = 1)
     {
-        NativeMethods.bgfx_dispatch_indirect(id, program.handle, indirectBuffer.handle, (ushort)startIndex, (ushort)count);
+        bgfx.dispatch_indirect(id, program.handle, indirectBuffer.handle, (ushort)startIndex, (ushort)count);
     }
 
     /// <summary>
@@ -990,7 +991,7 @@ public static unsafe class Bgfx
     /// <param name="filePath">The file path that will be passed to the callback event.</param>
     public static void RequestScreenShot(string filePath)
     {
-        NativeMethods.bgfx_request_screen_shot(ushort.MaxValue, filePath);
+        bgfx.request_screen_shot(ushort.MaxValue, filePath);
     }
 
     /// <summary>
@@ -1000,7 +1001,7 @@ public static unsafe class Bgfx
     /// <param name="filePath">The file path that will be passed to the callback event.</param>
     public static void RequestScreenShot(FrameBuffer frameBuffer, string filePath)
     {
-        NativeMethods.bgfx_request_screen_shot(frameBuffer.handle, filePath);
+        bgfx.request_screen_shot(frameBuffer.handle, filePath);
     }
 
     /// <summary>
@@ -1009,7 +1010,7 @@ public static unsafe class Bgfx
     /// <param name="state">The set of states to set.</param>
     public static void SetRenderState(RenderState state)
     {
-        NativeMethods.bgfx_set_state((ulong)state, 0);
+        bgfx.set_state((ulong)state, 0);
     }
 
     /// <summary>
@@ -1019,7 +1020,7 @@ public static unsafe class Bgfx
     /// <param name="colorRgba">The color used for "factor" blending modes.</param>
     public static void SetRenderState(RenderState state, int colorRgba)
     {
-        NativeMethods.bgfx_set_state((ulong)state, colorRgba);
+        bgfx.set_state((ulong)state, colorRgba);
     }
 
     /// <summary>
@@ -1038,7 +1039,7 @@ public static unsafe class Bgfx
     /// <param name="backFace">The stencil state to use for back faces.</param>
     public static void SetStencil(StencilFlags frontFace, StencilFlags backFace)
     {
-        NativeMethods.bgfx_set_stencil((uint)frontFace, (uint)backFace);
+        bgfx.set_stencil((uint)frontFace, (uint)backFace);
     }
 
     /// <summary>
@@ -1047,6 +1048,6 @@ public static unsafe class Bgfx
     /// <returns>An encoder instance that can be used to submit commands.</returns>
     public static Encoder Begin()
     {
-        return new Encoder(NativeMethods.bgfx_begin());
+        return new Encoder(bgfx.begin());
     }
 }

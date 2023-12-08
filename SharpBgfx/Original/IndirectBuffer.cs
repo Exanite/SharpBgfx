@@ -1,4 +1,5 @@
 ﻿using System;
+using SharpBgfx.Bindings;
 
 namespace SharpBgfx.Original;
 
@@ -20,7 +21,7 @@ public struct IndirectBuffer : IDisposable
     /// <param name="size">The number of commands that can fit in the buffer.</param>
     public IndirectBuffer(int size)
     {
-        handle = NativeMethods.bgfx_create_indirect_buffer(size);
+        handle = bgfx.create_indirect_buffer(size);
     }
 
     /// <summary>
@@ -28,7 +29,7 @@ public struct IndirectBuffer : IDisposable
     /// </summary>
     public void Dispose()
     {
-        NativeMethods.bgfx_destroy_indirect_buffer(handle);
+        bgfx.destroy_indirect_buffer(handle);
     }
 
     public override string ToString()

@@ -1,4 +1,5 @@
 ﻿using System;
+using SharpBgfx.Bindings;
 
 namespace SharpBgfx;
 
@@ -38,7 +39,7 @@ public struct TransientVertexBuffer
     /// <param name="layout">The layout of the vertex data.</param>
     public TransientVertexBuffer(int vertexCount, VertexLayout layout)
     {
-        NativeMethods.bgfx_alloc_transient_vertex_buffer(out this, vertexCount, ref layout.data);
+        bgfx.alloc_transient_vertex_buffer(out this, vertexCount, ref layout.data);
     }
 
     /// <summary>
@@ -49,7 +50,7 @@ public struct TransientVertexBuffer
     /// <returns>The number of available vertices.</returns>
     public static int GetAvailableSpace(int count, VertexLayout layout)
     {
-        return NativeMethods.bgfx_get_avail_transient_vertex_buffer(count, ref layout.data);
+        return bgfx.get_avail_transient_vertex_buffer(count, ref layout.data);
     }
 
     public override string ToString()

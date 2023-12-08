@@ -1,4 +1,5 @@
 ﻿using System;
+using SharpBgfx.Bindings;
 
 namespace SharpBgfx.Original;
 
@@ -17,7 +18,7 @@ public unsafe struct OcclusionQuery : IDisposable
     /// <summary>
     /// Gets the result of the query.
     /// </summary>
-    public OcclusionQueryResult Result => NativeMethods.bgfx_get_result(handle, null);
+    public OcclusionQueryResult Result => bgfx.get_result(handle, null);
 
     /// <summary>
     /// Gets the number of pixels that passed the test. Only valid
@@ -28,7 +29,7 @@ public unsafe struct OcclusionQuery : IDisposable
         get
         {
             var pixels = 0;
-            NativeMethods.bgfx_get_result(handle, &pixels);
+            bgfx.get_result(handle, &pixels);
 
             return pixels;
         }
@@ -45,7 +46,7 @@ public unsafe struct OcclusionQuery : IDisposable
     /// <returns>The new occlusion query.</returns>
     public static OcclusionQuery Create()
     {
-        return new OcclusionQuery(NativeMethods.bgfx_create_occlusion_query());
+        return new OcclusionQuery(bgfx.create_occlusion_query());
     }
 
     /// <summary>
@@ -53,7 +54,7 @@ public unsafe struct OcclusionQuery : IDisposable
     /// </summary>
     public void Dispose()
     {
-        NativeMethods.bgfx_destroy_occlusion_query(handle);
+        bgfx.destroy_occlusion_query(handle);
     }
 
     /// <summary>
@@ -62,7 +63,7 @@ public unsafe struct OcclusionQuery : IDisposable
     /// <param name="visible"><c>true</c> for visible; <c>false</c> for invisible.</param>
     public void SetCondition(bool visible)
     {
-        NativeMethods.bgfx_set_condition(handle, visible);
+        bgfx.set_condition(handle, visible);
     }
 
     public override string ToString()

@@ -1,4 +1,5 @@
 ﻿using System;
+using SharpBgfx.Bindings;
 
 namespace SharpBgfx.Original;
 
@@ -21,7 +22,7 @@ public unsafe struct IndexBuffer : IDisposable
     /// <param name="flags">Flags used to control buffer behavior.</param>
     public IndexBuffer(MemoryBlock memory, BufferFlags flags = BufferFlags.None)
     {
-        handle = NativeMethods.bgfx_create_index_buffer(memory.ptr, flags);
+        handle = bgfx.create_index_buffer(memory.ptr, flags);
     }
 
     /// <summary>
@@ -30,7 +31,7 @@ public unsafe struct IndexBuffer : IDisposable
     /// <param name="name">The name of the texture.</param>
     public void SetName(string name)
     {
-        NativeMethods.bgfx_set_index_buffer_name(handle, name, int.MaxValue);
+        bgfx.set_index_buffer_name(handle, name, int.MaxValue);
     }
 
     /// <summary>
@@ -38,7 +39,7 @@ public unsafe struct IndexBuffer : IDisposable
     /// </summary>
     public void Dispose()
     {
-        NativeMethods.bgfx_destroy_index_buffer(handle);
+        bgfx.destroy_index_buffer(handle);
     }
 
     public override string ToString()

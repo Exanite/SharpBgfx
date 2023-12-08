@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using SharpBgfx.Bindings;
 
 namespace SharpBgfx.Original;
 
@@ -941,7 +942,7 @@ public class InitSettings
     public unsafe InitSettings()
     {
         Native native;
-        NativeMethods.bgfx_init_ctor(&native);
+        bgfx.init_ctor(&native);
 
         Backend = native.Backend;
         Adapter = new Adapter((Vendor)native.VendorId, native.DeviceId);

@@ -1,4 +1,5 @@
 ﻿using System;
+using SharpBgfx.Bindings;
 
 namespace SharpBgfx.Original;
 
@@ -21,7 +22,7 @@ public unsafe struct DynamicIndexBuffer : IDisposable
     /// <param name="flags">Flags used to control buffer behavior.</param>
     public DynamicIndexBuffer(int indexCount, BufferFlags flags = BufferFlags.None)
     {
-        handle = NativeMethods.bgfx_create_dynamic_index_buffer(indexCount, flags);
+        handle = bgfx.create_dynamic_index_buffer(indexCount, flags);
     }
 
     /// <summary>
@@ -31,7 +32,7 @@ public unsafe struct DynamicIndexBuffer : IDisposable
     /// <param name="flags">Flags used to control buffer behavior.</param>
     public DynamicIndexBuffer(MemoryBlock memory, BufferFlags flags = BufferFlags.None)
     {
-        handle = NativeMethods.bgfx_create_dynamic_index_buffer_mem(memory.ptr, flags);
+        handle = bgfx.create_dynamic_index_buffer_mem(memory.ptr, flags);
     }
 
     /// <summary>
@@ -41,7 +42,7 @@ public unsafe struct DynamicIndexBuffer : IDisposable
     /// <param name="memory">The new index data with which to fill the buffer.</param>
     public void Update(int startIndex, MemoryBlock memory)
     {
-        NativeMethods.bgfx_update_dynamic_index_buffer(handle, startIndex, memory.ptr);
+        bgfx.update_dynamic_index_buffer(handle, startIndex, memory.ptr);
     }
 
     /// <summary>
@@ -49,7 +50,7 @@ public unsafe struct DynamicIndexBuffer : IDisposable
     /// </summary>
     public void Dispose()
     {
-        NativeMethods.bgfx_destroy_dynamic_index_buffer(handle);
+        bgfx.destroy_dynamic_index_buffer(handle);
     }
 
     public override string ToString()

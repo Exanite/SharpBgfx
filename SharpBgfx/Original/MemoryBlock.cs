@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Security;
+using SharpBgfx.Bindings;
 
 namespace SharpBgfx.Original;
 
@@ -45,7 +46,7 @@ public unsafe struct MemoryBlock
     /// <param name="size">The size of the block, in bytes.</param>
     public MemoryBlock(int size)
     {
-        ptr = NativeMethods.bgfx_alloc(size);
+        ptr = bgfx.alloc(size);
     }
 
     /// <summary>
@@ -55,7 +56,7 @@ public unsafe struct MemoryBlock
     /// <param name="size">The size of the block, in bytes.</param>
     public MemoryBlock(IntPtr data, int size)
     {
-        ptr = NativeMethods.bgfx_copy(data, size);
+        ptr = bgfx.copy(data, size);
     }
 
     /// <summary>
@@ -114,7 +115,7 @@ public unsafe struct MemoryBlock
     /// </remarks>
     public static MemoryBlock MakeRef(IntPtr data, int size, IntPtr userData, ReleaseCallback callback)
     {
-        return new MemoryBlock(NativeMethods.bgfx_make_ref_release(data, size, Marshal.GetFunctionPointerForDelegate(callback), userData));
+        return new MemoryBlock(bgfx.make_ref_release(data, size, Marshal.GetFunctionPointerForDelegate(callback), userData));
     }
 
     public override string ToString()

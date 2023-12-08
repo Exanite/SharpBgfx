@@ -1,4 +1,5 @@
 ﻿using System;
+using SharpBgfx.Bindings;
 
 namespace SharpBgfx.Original;
 
@@ -21,7 +22,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="marker">The user-defined name of the marker.</param>
     public void SetDebugMarker(string marker)
     {
-        NativeMethods.bgfx_encoder_set_marker(ptr, marker);
+        bgfx.encoder_set_marker(ptr, marker);
     }
 
     /// <summary>
@@ -30,7 +31,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="state">The set of states to set.</param>
     public void SetRenderState(RenderState state)
     {
-        NativeMethods.bgfx_encoder_set_state(ptr, (ulong)state, 0);
+        bgfx.encoder_set_state(ptr, (ulong)state, 0);
     }
 
     /// <summary>
@@ -40,7 +41,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="colorRgba">The color used for "factor" blending modes.</param>
     public void SetRenderState(RenderState state, int colorRgba)
     {
-        NativeMethods.bgfx_encoder_set_state(ptr, (ulong)state, colorRgba);
+        bgfx.encoder_set_state(ptr, (ulong)state, colorRgba);
     }
 
     /// <summary>
@@ -59,7 +60,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="backFace">The stencil state to use for back faces.</param>
     public void SetStencil(StencilFlags frontFace, StencilFlags backFace)
     {
-        NativeMethods.bgfx_encoder_set_stencil(ptr, (uint)frontFace, (uint)backFace);
+        bgfx.encoder_set_stencil(ptr, (uint)frontFace, (uint)backFace);
     }
 
     /// <summary>
@@ -74,7 +75,7 @@ public unsafe struct Encoder : IDisposable
     /// </returns>
     public int SetScissor(int x, int y, int width, int height)
     {
-        return NativeMethods.bgfx_encoder_set_scissor(ptr, (ushort)x, (ushort)y, (ushort)width, (ushort)height);
+        return bgfx.encoder_set_scissor(ptr, (ushort)x, (ushort)y, (ushort)width, (ushort)height);
     }
 
     /// <summary>
@@ -83,7 +84,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="cacheIndex">The index of the cached scissor rectangle, or -1 to unset.</param>
     public void SetScissor(int cacheIndex = -1)
     {
-        NativeMethods.bgfx_encoder_set_scissor_cached(ptr, (ushort)cacheIndex);
+        bgfx.encoder_set_scissor_cached(ptr, (ushort)cacheIndex);
     }
 
     /// <summary>
@@ -94,7 +95,7 @@ public unsafe struct Encoder : IDisposable
     /// <returns>An index into the matrix cache to allow reusing the matrix in other calls.</returns>
     public int SetTransform(float* matrix, int count = 1)
     {
-        return NativeMethods.bgfx_encoder_set_transform(ptr, matrix, (ushort)count);
+        return bgfx.encoder_set_transform(ptr, matrix, (ushort)count);
     }
 
     /// <summary>
@@ -104,7 +105,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="count">The number of matrices to set from the cache.</param>
     public void SetTransform(int cacheIndex, int count = 1)
     {
-        NativeMethods.bgfx_encoder_set_transform_cached(ptr, cacheIndex, (ushort)count);
+        bgfx.encoder_set_transform_cached(ptr, cacheIndex, (ushort)count);
     }
 
     /// <summary>
@@ -115,7 +116,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="arraySize">The size of the data array, if the uniform is an array.</param>
     public void SetUniform(Uniform uniform, float value, int arraySize = 1)
     {
-        NativeMethods.bgfx_encoder_set_uniform(ptr, uniform.handle, &value, (ushort)arraySize);
+        bgfx.encoder_set_uniform(ptr, uniform.handle, &value, (ushort)arraySize);
     }
 
     /// <summary>
@@ -126,7 +127,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="arraySize">The size of the data array, if the uniform is an array.</param>
     public void SetUniform(Uniform uniform, void* value, int arraySize = 1)
     {
-        NativeMethods.bgfx_encoder_set_uniform(ptr, uniform.handle, value, (ushort)arraySize);
+        bgfx.encoder_set_uniform(ptr, uniform.handle, value, (ushort)arraySize);
     }
 
     /// <summary>
@@ -137,7 +138,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="arraySize">The size of the data array, if the uniform is an array.</param>
     public void SetUniform(Uniform uniform, IntPtr value, int arraySize = 1)
     {
-        NativeMethods.bgfx_encoder_set_uniform(ptr, uniform.handle, value.ToPointer(), (ushort)arraySize);
+        bgfx.encoder_set_uniform(ptr, uniform.handle, value.ToPointer(), (ushort)arraySize);
     }
 
     /// <summary>
@@ -148,7 +149,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="texture">The texture to set.</param>
     public void SetTexture(byte textureUnit, Uniform sampler, Texture texture)
     {
-        NativeMethods.bgfx_encoder_set_texture(ptr, textureUnit, sampler.handle, texture.handle, uint.MaxValue);
+        bgfx.encoder_set_texture(ptr, textureUnit, sampler.handle, texture.handle, uint.MaxValue);
     }
 
     /// <summary>
@@ -160,7 +161,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="flags">Sampling flags that override the default flags in the texture itself.</param>
     public void SetTexture(byte textureUnit, Uniform sampler, Texture texture, TextureFlags flags)
     {
-        NativeMethods.bgfx_encoder_set_texture(ptr, textureUnit, sampler.handle, texture.handle, (uint)flags);
+        bgfx.encoder_set_texture(ptr, textureUnit, sampler.handle, texture.handle, (uint)flags);
     }
 
     /// <summary>
@@ -169,7 +170,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="indexBuffer">The index buffer to set.</param>
     public void SetIndexBuffer(IndexBuffer indexBuffer)
     {
-        NativeMethods.bgfx_encoder_set_index_buffer(ptr, indexBuffer.handle, 0, -1);
+        bgfx.encoder_set_index_buffer(ptr, indexBuffer.handle, 0, -1);
     }
 
     /// <summary>
@@ -180,7 +181,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="count">The number of indices to pull from the buffer.</param>
     public void SetIndexBuffer(IndexBuffer indexBuffer, int firstIndex, int count)
     {
-        NativeMethods.bgfx_encoder_set_index_buffer(ptr, indexBuffer.handle, firstIndex, count);
+        bgfx.encoder_set_index_buffer(ptr, indexBuffer.handle, firstIndex, count);
     }
 
     /// <summary>
@@ -190,7 +191,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="vertexBuffer">The vertex buffer to set.</param>
     public void SetVertexBuffer(int stream, VertexBuffer vertexBuffer)
     {
-        NativeMethods.bgfx_encoder_set_vertex_buffer(ptr, (byte)stream, vertexBuffer.handle, 0, -1);
+        bgfx.encoder_set_vertex_buffer(ptr, (byte)stream, vertexBuffer.handle, 0, -1);
     }
 
     /// <summary>
@@ -202,7 +203,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="count">The number of vertices to pull from the buffer.</param>
     public void SetVertexBuffer(int stream, VertexBuffer vertexBuffer, int firstVertex, int count)
     {
-        NativeMethods.bgfx_encoder_set_vertex_buffer(ptr, (byte)stream, vertexBuffer.handle, firstVertex, count);
+        bgfx.encoder_set_vertex_buffer(ptr, (byte)stream, vertexBuffer.handle, firstVertex, count);
     }
 
     /// <summary>
@@ -211,7 +212,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="indexBuffer">The index buffer to set.</param>
     public void SetIndexBuffer(DynamicIndexBuffer indexBuffer)
     {
-        NativeMethods.bgfx_encoder_set_dynamic_index_buffer(ptr, indexBuffer.handle, 0, -1);
+        bgfx.encoder_set_dynamic_index_buffer(ptr, indexBuffer.handle, 0, -1);
     }
 
     /// <summary>
@@ -222,7 +223,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="count">The number of indices to pull from the buffer.</param>
     public void SetIndexBuffer(DynamicIndexBuffer indexBuffer, int firstIndex, int count)
     {
-        NativeMethods.bgfx_encoder_set_dynamic_index_buffer(ptr, indexBuffer.handle, firstIndex, count);
+        bgfx.encoder_set_dynamic_index_buffer(ptr, indexBuffer.handle, firstIndex, count);
     }
 
     /// <summary>
@@ -232,7 +233,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="vertexBuffer">The vertex buffer to set.</param>
     public void SetVertexBuffer(int stream, DynamicVertexBuffer vertexBuffer)
     {
-        NativeMethods.bgfx_encoder_set_dynamic_vertex_buffer(ptr, (byte)stream, vertexBuffer.handle, 0, -1);
+        bgfx.encoder_set_dynamic_vertex_buffer(ptr, (byte)stream, vertexBuffer.handle, 0, -1);
     }
 
     /// <summary>
@@ -244,7 +245,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="count">The number of vertices to pull from the buffer.</param>
     public void SetVertexBuffer(int stream, DynamicVertexBuffer vertexBuffer, int startVertex, int count)
     {
-        NativeMethods.bgfx_encoder_set_dynamic_vertex_buffer(ptr, (byte)stream, vertexBuffer.handle, startVertex, count);
+        bgfx.encoder_set_dynamic_vertex_buffer(ptr, (byte)stream, vertexBuffer.handle, startVertex, count);
     }
 
     /// <summary>
@@ -253,7 +254,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="indexBuffer">The index buffer to set.</param>
     public void SetIndexBuffer(TransientIndexBuffer indexBuffer)
     {
-        NativeMethods.bgfx_encoder_set_transient_index_buffer(ptr, ref indexBuffer, 0, -1);
+        bgfx.encoder_set_transient_index_buffer(ptr, ref indexBuffer, 0, -1);
     }
 
     /// <summary>
@@ -264,7 +265,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="count">The number of indices to pull from the buffer.</param>
     public void SetIndexBuffer(TransientIndexBuffer indexBuffer, int firstIndex, int count)
     {
-        NativeMethods.bgfx_encoder_set_transient_index_buffer(ptr, ref indexBuffer, firstIndex, count);
+        bgfx.encoder_set_transient_index_buffer(ptr, ref indexBuffer, firstIndex, count);
     }
 
     /// <summary>
@@ -274,7 +275,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="vertexBuffer">The vertex buffer to set.</param>
     public void SetVertexBuffer(int stream, TransientVertexBuffer vertexBuffer)
     {
-        NativeMethods.bgfx_encoder_set_transient_vertex_buffer(ptr, (byte)stream, ref vertexBuffer, 0, -1);
+        bgfx.encoder_set_transient_vertex_buffer(ptr, (byte)stream, ref vertexBuffer, 0, -1);
     }
 
     /// <summary>
@@ -286,7 +287,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="count">The number of vertices to pull from the buffer.</param>
     public void SetVertexBuffer(int stream, TransientVertexBuffer vertexBuffer, int firstVertex, int count)
     {
-        NativeMethods.bgfx_encoder_set_transient_vertex_buffer(ptr, (byte)stream, ref vertexBuffer, firstVertex, count);
+        bgfx.encoder_set_transient_vertex_buffer(ptr, (byte)stream, ref vertexBuffer, firstVertex, count);
     }
 
     /// <summary>
@@ -295,7 +296,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="count">The number of auto-generated vertices.</param>
     public void SetVertexCount(int count)
     {
-        NativeMethods.bgfx_encoder_set_vertex_count(ptr, count);
+        bgfx.encoder_set_vertex_count(ptr, count);
     }
 
     /// <summary>
@@ -306,7 +307,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="count">The number of entries to pull from the buffer.</param>
     public void SetInstanceDataBuffer(ref InstanceDataBuffer instanceData, int start = 0, int count = -1)
     {
-        NativeMethods.bgfx_encoder_set_instance_data_buffer(ptr, ref instanceData.data, (uint)start, (uint)count);
+        bgfx.encoder_set_instance_data_buffer(ptr, ref instanceData.data, (uint)start, (uint)count);
     }
 
     /// <summary>
@@ -317,7 +318,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="count">The number of vertices to pull from the buffer.</param>
     public void SetInstanceDataBuffer(VertexBuffer vertexBuffer, int firstVertex, int count)
     {
-        NativeMethods.bgfx_encoder_set_instance_data_from_vertex_buffer(ptr, vertexBuffer.handle, firstVertex, count);
+        bgfx.encoder_set_instance_data_from_vertex_buffer(ptr, vertexBuffer.handle, firstVertex, count);
     }
 
     /// <summary>
@@ -328,7 +329,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="count">The number of vertices to pull from the buffer.</param>
     public void SetInstanceDataBuffer(DynamicVertexBuffer vertexBuffer, int firstVertex, int count)
     {
-        NativeMethods.bgfx_encoder_set_instance_data_from_dynamic_vertex_buffer(ptr, vertexBuffer.handle, firstVertex, count);
+        bgfx.encoder_set_instance_data_from_dynamic_vertex_buffer(ptr, vertexBuffer.handle, firstVertex, count);
     }
 
     /// <summary>
@@ -338,7 +339,7 @@ public unsafe struct Encoder : IDisposable
     /// <returns>The number of draw calls.</returns>
     public int Touch(ushort id)
     {
-        return NativeMethods.bgfx_encoder_touch(ptr, id);
+        return bgfx.encoder_touch(ptr, id);
     }
 
     /// <summary>
@@ -351,7 +352,7 @@ public unsafe struct Encoder : IDisposable
     /// <returns>The number of draw calls.</returns>
     public int Submit(ushort id, Program program, int depth = 0, bool preserveState = false)
     {
-        return NativeMethods.bgfx_encoder_submit(ptr, id, program.handle, depth, preserveState);
+        return bgfx.encoder_submit(ptr, id, program.handle, depth, preserveState);
     }
 
     /// <summary>
@@ -365,7 +366,7 @@ public unsafe struct Encoder : IDisposable
     /// <returns>The number of draw calls.</returns>
     public int Submit(ushort id, Program program, OcclusionQuery query, int depth = 0, bool preserveState = false)
     {
-        return NativeMethods.bgfx_encoder_submit_occlusion_query(ptr, id, program.handle, query.handle, depth, preserveState);
+        return bgfx.encoder_submit_occlusion_query(ptr, id, program.handle, query.handle, depth, preserveState);
     }
 
     /// <summary>
@@ -381,7 +382,7 @@ public unsafe struct Encoder : IDisposable
     /// <returns>The number of draw calls.</returns>
     public int Submit(ushort id, Program program, IndirectBuffer indirectBuffer, int startIndex = 0, int count = 1, int depth = 0, bool preserveState = false)
     {
-        return NativeMethods.bgfx_encoder_submit_indirect(ptr, id, program.handle, indirectBuffer.handle, (ushort)startIndex, (ushort)count, depth, preserveState);
+        return bgfx.encoder_submit_indirect(ptr, id, program.handle, indirectBuffer.handle, (ushort)startIndex, (ushort)count, depth, preserveState);
     }
 
     /// <summary>
@@ -394,7 +395,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="access">Access control flags.</param>
     public void SetComputeImage(byte stage, Texture texture, byte mip, ComputeBufferAccess access, TextureFormat format = TextureFormat.Unknown)
     {
-        NativeMethods.bgfx_encoder_set_image(ptr, stage, texture.handle, mip, format, access);
+        bgfx.encoder_set_image(ptr, stage, texture.handle, mip, format, access);
     }
 
     /// <summary>
@@ -405,7 +406,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="access">Access control flags.</param>
     public void SetComputeBuffer(byte stage, IndexBuffer buffer, ComputeBufferAccess access)
     {
-        NativeMethods.bgfx_encoder_set_compute_index_buffer(ptr, stage, buffer.handle, access);
+        bgfx.encoder_set_compute_index_buffer(ptr, stage, buffer.handle, access);
     }
 
     /// <summary>
@@ -416,7 +417,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="access">Access control flags.</param>
     public void SetComputeBuffer(byte stage, VertexBuffer buffer, ComputeBufferAccess access)
     {
-        NativeMethods.bgfx_encoder_set_compute_vertex_buffer(ptr, stage, buffer.handle, access);
+        bgfx.encoder_set_compute_vertex_buffer(ptr, stage, buffer.handle, access);
     }
 
     /// <summary>
@@ -427,7 +428,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="access">Access control flags.</param>
     public void SetComputeBuffer(byte stage, DynamicIndexBuffer buffer, ComputeBufferAccess access)
     {
-        NativeMethods.bgfx_encoder_set_compute_dynamic_index_buffer(ptr, stage, buffer.handle, access);
+        bgfx.encoder_set_compute_dynamic_index_buffer(ptr, stage, buffer.handle, access);
     }
 
     /// <summary>
@@ -438,7 +439,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="access">Access control flags.</param>
     public void SetComputeBuffer(byte stage, DynamicVertexBuffer buffer, ComputeBufferAccess access)
     {
-        NativeMethods.bgfx_encoder_set_compute_dynamic_vertex_buffer(ptr, stage, buffer.handle, access);
+        bgfx.encoder_set_compute_dynamic_vertex_buffer(ptr, stage, buffer.handle, access);
     }
 
     /// <summary>
@@ -449,7 +450,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="access">Access control flags.</param>
     public void SetComputeBuffer(byte stage, IndirectBuffer buffer, ComputeBufferAccess access)
     {
-        NativeMethods.bgfx_encoder_set_compute_indirect_buffer(ptr, stage, buffer.handle, access);
+        bgfx.encoder_set_compute_indirect_buffer(ptr, stage, buffer.handle, access);
     }
 
     /// <summary>
@@ -462,7 +463,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="zCount">The size of the job in the third dimension.</param>
     public void Dispatch(ushort id, Program program, int xCount = 1, int yCount = 1, int zCount = 1)
     {
-        NativeMethods.bgfx_encoder_dispatch(ptr, id, program.handle, (uint)xCount, (uint)yCount, (uint)zCount);
+        bgfx.encoder_dispatch(ptr, id, program.handle, (uint)xCount, (uint)yCount, (uint)zCount);
     }
 
     /// <summary>
@@ -475,7 +476,7 @@ public unsafe struct Encoder : IDisposable
     /// <param name="count">The number of commands to process from the buffer.</param>
     public void Dispatch(ushort id, Program program, IndirectBuffer indirectBuffer, int startIndex = 0, int count = 1)
     {
-        NativeMethods.bgfx_encoder_dispatch_indirect(ptr, id, program.handle, indirectBuffer.handle, (ushort)startIndex, (ushort)count);
+        bgfx.encoder_dispatch_indirect(ptr, id, program.handle, indirectBuffer.handle, (ushort)startIndex, (ushort)count);
     }
 
     /// <summary>
@@ -483,7 +484,7 @@ public unsafe struct Encoder : IDisposable
     /// </summary>
     public void Discard()
     {
-        NativeMethods.bgfx_encoder_discard(ptr);
+        bgfx.encoder_discard(ptr);
     }
 
     /// <summary>
@@ -491,7 +492,7 @@ public unsafe struct Encoder : IDisposable
     /// </summary>
     public void Dispose()
     {
-        NativeMethods.bgfx_end(ptr);
+        bgfx.end(ptr);
     }
 
     public override string ToString()

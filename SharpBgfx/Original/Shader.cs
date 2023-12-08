@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SharpBgfx.Bindings;
 
 namespace SharpBgfx.Original;
 
@@ -25,9 +26,9 @@ public unsafe struct Shader : IDisposable
         {
             if (uniforms == null)
             {
-                var count = NativeMethods.bgfx_get_shader_uniforms(handle, null, 0);
+                var count = bgfx.get_shader_uniforms(handle, null, 0);
                 uniforms = new Uniform[count];
-                NativeMethods.bgfx_get_shader_uniforms(handle, uniforms, count);
+                bgfx.get_shader_uniforms(handle, uniforms, count);
             }
 
             return uniforms;
@@ -40,7 +41,7 @@ public unsafe struct Shader : IDisposable
     /// <param name="memory">The compiled shader memory.</param>
     public Shader(MemoryBlock memory)
     {
-        handle = NativeMethods.bgfx_create_shader(memory.ptr);
+        handle = bgfx.create_shader(memory.ptr);
         uniforms = null;
     }
 
@@ -49,7 +50,7 @@ public unsafe struct Shader : IDisposable
     /// </summary>
     public void Dispose()
     {
-        NativeMethods.bgfx_destroy_shader(handle);
+        bgfx.destroy_shader(handle);
     }
 
     /// <summary>
@@ -58,7 +59,7 @@ public unsafe struct Shader : IDisposable
     /// <param name="name">The name of the shader.</param>
     public void SetName(string name)
     {
-        NativeMethods.bgfx_set_shader_name(handle, name, int.MaxValue);
+        bgfx.set_shader_name(handle, name, int.MaxValue);
     }
 
     public override string ToString()

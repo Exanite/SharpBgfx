@@ -1,4 +1,5 @@
 ﻿using System;
+using SharpBgfx.Bindings;
 
 namespace SharpBgfx.Original;
 
@@ -54,7 +55,7 @@ public unsafe struct FrameBuffer : IDisposable
     /// <param name="flags">Texture sampling flags.</param>
     public FrameBuffer(int width, int height, TextureFormat format, TextureFlags flags = TextureFlags.ClampU | TextureFlags.ClampV)
     {
-        handle = NativeMethods.bgfx_create_frame_buffer((ushort)width, (ushort)height, format, flags);
+        handle = bgfx.create_frame_buffer((ushort)width, (ushort)height, format, flags);
     }
 
     /// <summary>
@@ -65,7 +66,7 @@ public unsafe struct FrameBuffer : IDisposable
     /// <param name="flags">Texture sampling flags.</param>
     public FrameBuffer(BackbufferRatio ratio, TextureFormat format, TextureFlags flags = TextureFlags.ClampU | TextureFlags.ClampV)
     {
-        handle = NativeMethods.bgfx_create_frame_buffer_scaled(ratio, format, flags);
+        handle = bgfx.create_frame_buffer_scaled(ratio, format, flags);
     }
 
     /// <summary>
@@ -91,7 +92,7 @@ public unsafe struct FrameBuffer : IDisposable
             };
         }
 
-        handle = NativeMethods.bgfx_create_frame_buffer_from_attachment(count, native, destroyTextures);
+        handle = bgfx.create_frame_buffer_from_attachment(count, native, destroyTextures);
     }
 
     /// <summary>
@@ -109,7 +110,7 @@ public unsafe struct FrameBuffer : IDisposable
             native[i] = textures[i].handle;
         }
 
-        handle = NativeMethods.bgfx_create_frame_buffer_from_handles(count, native, destroyTextures);
+        handle = bgfx.create_frame_buffer_from_handles(count, native, destroyTextures);
     }
 
     /// <summary>
@@ -122,7 +123,7 @@ public unsafe struct FrameBuffer : IDisposable
     /// <param name="depthFormat">A desired format for a depth buffer, if applicable.</param>
     public FrameBuffer(IntPtr windowHandle, int width, int height, TextureFormat format = TextureFormat.Count, TextureFormat depthFormat = TextureFormat.Count)
     {
-        handle = NativeMethods.bgfx_create_frame_buffer_from_nwh(windowHandle, (ushort)width, (ushort)height, format, depthFormat);
+        handle = bgfx.create_frame_buffer_from_nwh(windowHandle, (ushort)width, (ushort)height, format, depthFormat);
     }
 
     /// <summary>
@@ -131,7 +132,7 @@ public unsafe struct FrameBuffer : IDisposable
     /// <param name="name">The name of the texture.</param>
     public void SetName(string name)
     {
-        NativeMethods.bgfx_set_frame_buffer_name(handle, name, int.MaxValue);
+        bgfx.set_frame_buffer_name(handle, name, int.MaxValue);
     }
 
     /// <summary>
@@ -139,7 +140,7 @@ public unsafe struct FrameBuffer : IDisposable
     /// </summary>
     public void Dispose()
     {
-        NativeMethods.bgfx_destroy_frame_buffer(handle);
+        bgfx.destroy_frame_buffer(handle);
     }
 
     /// <summary>
@@ -151,7 +152,7 @@ public unsafe struct FrameBuffer : IDisposable
     {
         var info = new Texture.TextureInfo();
 
-        return new Texture(NativeMethods.bgfx_get_texture(handle, (byte)attachment), ref info);
+        return new Texture(bgfx.get_texture(handle, (byte)attachment), ref info);
     }
 
     public override string ToString()

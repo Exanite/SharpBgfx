@@ -1,4 +1,5 @@
 ﻿using System;
+using SharpBgfx.Bindings;
 
 namespace SharpBgfx.Original;
 
@@ -22,7 +23,7 @@ public unsafe struct VertexBuffer : IDisposable
     /// <param name="flags">Flags used to control buffer behavior.</param>
     public VertexBuffer(MemoryBlock memory, VertexLayout layout, BufferFlags flags = BufferFlags.None)
     {
-        handle = NativeMethods.bgfx_create_vertex_buffer(memory.ptr, ref layout.data, flags);
+        handle = bgfx.create_vertex_buffer(memory.ptr, ref layout.data, flags);
     }
 
     /// <summary>
@@ -31,7 +32,7 @@ public unsafe struct VertexBuffer : IDisposable
     /// <param name="name">The name of the texture.</param>
     public void SetName(string name)
     {
-        NativeMethods.bgfx_set_vertex_buffer_name(handle, name, int.MaxValue);
+        bgfx.set_vertex_buffer_name(handle, name, int.MaxValue);
     }
 
     /// <summary>
@@ -39,7 +40,7 @@ public unsafe struct VertexBuffer : IDisposable
     /// </summary>
     public void Dispose()
     {
-        NativeMethods.bgfx_destroy_vertex_buffer(handle);
+        bgfx.destroy_vertex_buffer(handle);
     }
 
     public override string ToString()
