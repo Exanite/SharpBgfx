@@ -5,6 +5,13 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <DefaultItemExcludes>
+      $(DefaultItemExcludes);
+      Original/**/*;
+    </DefaultItemExcludes>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Include="..\libs\Windows\bgfx.dll">
       <Link>bgfx.dll</Link>
