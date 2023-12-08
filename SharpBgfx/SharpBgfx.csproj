@@ -8,6 +8,22 @@
   <PropertyGroup>
     <DefaultItemExcludes>
       $(DefaultItemExcludes);
+
+      <!-- Researched original code (I'm using the original SharpBgfx code as a way to better understand bgfx) -->
+      Original/DebugColor.cs;
+      Original/MemoryBlock.cs;
+      Original/Program.cs;
+      Original/VertexLayout.cs;
+
+      Original/VertexBuffer.cs;
+      Original/TransientVertexBuffer.cs;
+
+      Original/IndexBuffer.cs;
+      Original/TransientIndexBuffer.cs;
+
+      Original/InstanceDataBuffer.cs;
+
+      <!-- Ignore rest of original code -->
       Original/**/*;
     </DefaultItemExcludes>
   </PropertyGroup>
