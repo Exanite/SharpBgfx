@@ -22,7 +22,7 @@ public static unsafe class Bgfx
     /// <returns><c>true</c> if both space requirements are satisfied and the buffers were allocated.</returns>
     public static bool AllocateTransientBuffers(int vertexCount, VertexLayout layout, int indexCount, out TransientVertexBuffer vertexBuffer, out TransientIndexBuffer indexBuffer)
     {
-        return bgfx.alloc_transient_buffers(out vertexBuffer, ref layout.data, (ushort)vertexCount, out indexBuffer, (ushort)indexCount);
+        return bgfx.alloc_transient_buffers(out vertexBuffer, ref layout.layout, (ushort)vertexCount, out indexBuffer, (ushort)indexCount);
     }
 
     /// <summary>
@@ -36,7 +36,7 @@ public static unsafe class Bgfx
     /// <param name="index">The index of the vertex within the stream.</param>
     public static void VertexPack(float* input, bool inputNormalized, VertexAttributeUsage attribute, VertexLayout layout, IntPtr data, int index = 0)
     {
-        bgfx.vertex_pack(input, inputNormalized, attribute, ref layout.data, data, index);
+        bgfx.vertex_pack(input, inputNormalized, attribute, ref layout.layout, data, index);
     }
 
     /// <summary>
@@ -49,7 +49,7 @@ public static unsafe class Bgfx
     /// <param name="index">The index of the vertex within the stream.</param>
     public static void VertexUnpack(float* output, VertexAttributeUsage attribute, VertexLayout layout, IntPtr data, int index = 0)
     {
-        bgfx.vertex_unpack(output, attribute, ref layout.data, data, index);
+        bgfx.vertex_unpack(output, attribute, ref layout.layout, data, index);
     }
 
     /// <summary>
@@ -62,7 +62,7 @@ public static unsafe class Bgfx
     /// <param name="count">The number of vertices to convert.</param>
     public static void VertexConvert(VertexLayout destinationLayout, IntPtr destinationData, VertexLayout sourceLayout, IntPtr sourceData, int count = 1)
     {
-        bgfx.vertex_convert(ref destinationLayout.data, destinationData, ref sourceLayout.data, sourceData, count);
+        bgfx.vertex_convert(ref destinationLayout.layout, destinationData, ref sourceLayout.layout, sourceData, count);
     }
 
     /// <summary>
@@ -79,7 +79,7 @@ public static unsafe class Bgfx
     public static int WeldVertices(VertexLayout layout, IntPtr data, int count, out int[] remappingTable, float epsilon = 0.001f)
     {
         var output = stackalloc ushort[count];
-        var result = bgfx.weld_vertices(output, ref layout.data, data, (ushort)count, epsilon);
+        var result = bgfx.weld_vertices(output, ref layout.layout, data, (ushort)count, epsilon);
 
         remappingTable = new int[count];
         for (var i = 0; i < count; i++)

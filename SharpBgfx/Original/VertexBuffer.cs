@@ -23,7 +23,7 @@ public unsafe struct VertexBuffer : IDisposable
     /// <param name="flags">Flags used to control buffer behavior.</param>
     public VertexBuffer(MemoryBlock memory, VertexLayout layout, BufferFlags flags = BufferFlags.None)
     {
-        handle = bgfx.create_vertex_buffer(memory.ptr, ref layout.data, flags);
+        handle = bgfx.create_vertex_buffer(memory.ptr, ref layout.layout, flags);
     }
 
     /// <summary>

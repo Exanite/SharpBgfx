@@ -23,7 +23,7 @@ public unsafe struct DynamicVertexBuffer : IDisposable
     /// <param name="flags">Flags used to control buffer behavior.</param>
     public DynamicVertexBuffer(int vertexCount, VertexLayout layout, BufferFlags flags = BufferFlags.None)
     {
-        handle = bgfx.create_dynamic_vertex_buffer(vertexCount, ref layout.data, flags);
+        handle = bgfx.create_dynamic_vertex_buffer(vertexCount, ref layout.layout, flags);
     }
 
     /// <summary>
@@ -34,7 +34,7 @@ public unsafe struct DynamicVertexBuffer : IDisposable
     /// <param name="flags">Flags used to control buffer behavior.</param>
     public DynamicVertexBuffer(MemoryBlock memory, VertexLayout layout, BufferFlags flags = BufferFlags.None)
     {
-        handle = bgfx.create_dynamic_vertex_buffer_mem(memory.ptr, ref layout.data, flags);
+        handle = bgfx.create_dynamic_vertex_buffer_mem(memory.ptr, ref layout.layout, flags);
     }
 
     /// <summary>

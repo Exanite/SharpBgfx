@@ -7,21 +7,21 @@ namespace SharpBgfx.Original;
 /// </summary>
 public sealed class VertexLayout
 {
-    internal Data data;
+    internal bgfx.VertexLayout layout;
 
     /// <summary>
     /// The stride of a single vertex using this layout.
     /// </summary>
-    public int Stride => data.Stride;
+    public int Stride => layout.stride;
 
     /// <summary>
     /// Starts a stream of vertex attribute additions to the layout.
     /// </summary>
     /// <param name="backend">The rendering backend with which to associate the attributes.</param>
     /// <returns>This instance, for use in a fluent API.</returns>
-    public VertexLayout Begin(RendererBackend backend = RendererBackend.Noop)
+    public VertexLayout Begin(bgfx.RendererType backend = bgfx.RendererType.Noop)
     {
-        bgfx.vertex_decl_begin(ref data, backend);
+        bgfx.vertex_layout_begin(ref layout, backend);
 
         return this;
     }
@@ -38,9 +38,9 @@ public sealed class VertexLayout
     /// <returns>
     /// This instance, for use in a fluent API.
     /// </returns>
-    public VertexLayout Add(VertexAttributeUsage attribute, int count, VertexAttributeType type, bool normalized = false, bool asInt = false)
+    public VertexLayout Add(bgfx.Attrib attribute, int count, bgfx.AttribType type, bool normalized = false, bool asInt = false)
     {
-        bgfx.vertex_decl_add(ref data, attribute, (byte)count, type, normalized, asInt);
+        bgfx.vertex_layout_add(ref layout, attribute, (byte)count, type, normalized, asInt);
 
         return this;
     }
@@ -52,7 +52,7 @@ public sealed class VertexLayout
     /// <returns>This instance, for use in a fluent API.</returns>
     public VertexLayout Skip(int count)
     {
-        bgfx.vertex_decl_skip(ref data, (byte)count);
+        bgfx.vertex_layout_skip(ref layout, (byte)count);
 
         return this;
     }
@@ -63,7 +63,7 @@ public sealed class VertexLayout
     /// <returns>This instance, for use in a fluent API.</returns>
     public VertexLayout End()
     {
-        bgfx.vertex_decl_end(ref data);
+        bgfx.vertex_layout_end(ref layout);
 
         return this;
     }
@@ -73,11 +73,11 @@ public sealed class VertexLayout
     /// </summary>
     /// <param name="attribute">The attribute for which to get the offset.</param>
     /// <returns>The offset of the attribute, in bytes.</returns>
-    public unsafe int GetOffset(VertexAttributeUsage attribute)
+    public unsafe int GetOffset(bgfx.Attrib attribute)
     {
-        fixed (Data* ptr = &data)
+        fixed (bgfx.VertexLayout* layoutP = &layout)
         {
-            return ptr->Offset[(int)attribute];
+            return layoutP->offset[(int)attribute];
         }
     }
 
@@ -86,21 +86,11 @@ public sealed class VertexLayout
     /// </summary>
     /// <param name="attribute">The attribute to check/</param>
     /// <returns><c>true</c> if the layout contains the attribute; otherwise, <c>false</c>.</returns>
-    public unsafe bool HasAttribute(VertexAttributeUsage attribute)
+    public unsafe bool HasAttribute(bgfx.Attrib attribute)
     {
-        fixed (Data* ptr = &data)
+        fixed (bgfx.VertexLayout* layoutP = &layout)
         {
-            return ptr->Attributes[(int)attribute] != ushort.MaxValue;
+            return layoutP->attributes[(int)attribute] != ushort.MaxValue;
         }
-    }
-
-    internal unsafe struct Data
-    {
-        private const int MaxAttribCount = 18;
-
-        public uint Hash;
-        public ushort Stride;
-        public fixed ushort Offset[MaxAttribCount];
-        public fixed ushort Attributes[MaxAttribCount];
     }
 }
